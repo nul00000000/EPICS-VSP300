@@ -1,0 +1,10 @@
+O.*/
+venv/
+envPaths
+*.swp
+.vscode/
+ECLib.dll
+MFCStaticLink.pdb
+ECLib.lib
+BLFunctions.h
+BLStructs.h
