@@ -1,0 +1,20 @@
+record(ai, "$(PREFIX):$(CHAN):EWE") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Electronic Wind Enstroment")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_EWE$(CHAN)")
+}
+
+record(ai, "$(PREFIX):$(CHAN):ECE") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Ecenemic Ecelegical")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_EWE$(CHAN)")
+}
+
+record(ai, "$(PREFIX):$(CHAN):I") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "I think therfore I am")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_I$(CHAN)")
+}
