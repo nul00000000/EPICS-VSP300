@@ -6,5 +6,7 @@ envPaths
 ECLib.dll
 MFCStaticLink.pdb
 ECLib.lib
+BioLogicDriver.lib
 BLFunctions.h
 BLStructs.h
+*.exe
