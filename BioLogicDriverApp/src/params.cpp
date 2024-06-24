@@ -1,9 +1,5 @@
 #include "params.h"
 
-Params::Params() {
-
-}
-
 Params::Params(int numSingle, int numInt, int numBool, int numSingleArray, int numIntArray, int numBoolArray) {
     this->singles = new int[numSingle];
     this->ints = new int[numInt];
@@ -83,7 +79,7 @@ void Params::createParams(asynPortDriver* driver) {
 
     for(int i = 0; i < numSingleArray; i++) {
         snprintf(substitutions, 40, "VSP_PSINGLEARR%d", i);
-        driver->createParam(substitutions, asynParamFloat64Array, &singleArrays[i]);
+        driver->createParam(substitutions, asynParamOctet, &singleArrays[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/singleArrayParam.template", substitutions);
@@ -91,7 +87,7 @@ void Params::createParams(asynPortDriver* driver) {
 
     for(int i = 0; i < numIntArray; i++) {
         snprintf(substitutions, 40, "VSP_PINTARR%d", i);
-        driver->createParam(substitutions, asynParamInt32Array, &intArrays[i]);
+        driver->createParam(substitutions, asynParamOctet, &intArrays[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/intArrayParam.template", substitutions);
@@ -99,7 +95,7 @@ void Params::createParams(asynPortDriver* driver) {
 
     for(int i = 0; i < numBoolArray; i++) {
         snprintf(substitutions, 40, "VSP_PBOOLARR%d", i);
-        driver->createParam(substitutions, asynParamInt32Array, &boolArrays[i]);
+        driver->createParam(substitutions, asynParamOctet, &boolArrays[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/boolArrayParam.template", substitutions);

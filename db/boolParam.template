@@ -1,6 +1,9 @@
-record(ao, "$(PREFIX):PARAM:BOOL:$(INDEX)") {
+record(bo, "$(PREFIX):PARAM:BOOL:$(INDEX)") {
     field(DTYP, "asynInt32")
-    field(DESC, "Double Param")
+    field(DESC, "Bool Param")
     field(PINI, "YES")
+    field(ZNAM, "false")
+    field(ONAM, "true")
+    field(VAL, "0")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PBOOL$(INDEX)")
 }

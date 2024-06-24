@@ -1,5 +1,7 @@
 record(waveform, "$(PREFIX):PARAM:SINGLEARR:$(INDEX)") {
-    field(DTYP, "asynFloat64ArrayOut")
+    field(DTYP, "asynOctetWrite")
     field(DESC, "Single Array Param")
+    field(FTVL, "CHAR")
+    field(NELM, "2048")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PSINGLEARR$(INDEX)")
 }

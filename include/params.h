@@ -26,7 +26,6 @@ class Params {
         int numIntArray;
         int numBoolArray;
 
-        Params();
         Params(int numSingle, int numInt, int numBool, int numSingleArray, int numIntArray, int numBoolArray);
         ~Params();
 

@@ -1,5 +1,7 @@
 record(waveform, "$(PREFIX):PARAM:BOOLARR:$(INDEX)") {
-    field(DTYP, "asynInt32ArrayOut")
+    field(DTYP, "asynOctetWrite")
     field(DESC, "Bool Array Param")
+    field(FTVL, "CHAR")
+    field(NELM, "2048")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PBOOLARR$(INDEX)")
 }
