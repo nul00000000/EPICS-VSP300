@@ -7,9 +7,12 @@ include $(TOP)/configure/CONFIG
 LIBRARY_IOC += BioLogicDriver
 
 INC += BioLogicDriver.hpp
+INC += params.h
+INC += channel.h
 #INC += $(ECLAB)/BLFunctions.h
 #INC += $(ECLAB)/BLStructs.h
 
+LIB_SRCS += params.cpp
 LIB_SRCS += BioLogicDriver.cpp
 
 DBD += BioLogicDriverSupport.dbd

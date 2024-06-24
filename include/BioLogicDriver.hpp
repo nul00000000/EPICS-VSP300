@@ -7,6 +7,7 @@
 #include <BLStructs.h>
 #include <BLFunctions.h>
 #include "channel.h"
+#include "params.h"
 
 #define MAX_CHANNELS 16
 
@@ -24,7 +25,9 @@
 #define EWE_STRING "VSP_EWE"
 #define ECE_STRING "VSP_ECE"
 #define I_STRING "VSP_I"
+#define TECH_STRING "VSP_TECH"
 
+class Params;
 
 class BioLogicDriver : public asynPortDriver {
 
@@ -38,7 +41,7 @@ public:
     //virtual asynStatus readFloat64(asynUser *pasynUser, epicsFloat64 *value);
     virtual asynStatus writeFloat64(asynUser* pasynUser, epicsFloat64 value);
     //virtual asynStatus readOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
-    //virtual asynStatus writeOctet(asynUser *pasynUser, char *value, size_t maxChars, size_t *nActual, int *eomReason);
+    virtual asynStatus writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual);
     //virtual asynStatus connect(asynUser* pasynUser);
     //virtual asynStatus disconnect(asynUser* pasynUser);
     virtual void report(FILE* fp, int details);
@@ -55,12 +58,15 @@ private:
     Channel* channels;
     int numChannels;
 
+    Params* blParams;
+
     int deviceID;
     TDeviceInfos_t deviceInfo;
 
     int idNum;
     int nchanNum;
     int versionNum;
+    int techniqueNum;
 
     Channel createChannel(int id);
     void setupConnection();

@@ -1,0 +1,6 @@
+record(ao, "$(PREFIX):PARAM:SINGLE:$(INDEX)") {
+    field(DTYP, "asynFloat64")
+    field(DESC, "Single Param")
+    field(PINI, "YES")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PSINGLE$(INDEX)")
+}

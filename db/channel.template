@@ -9,7 +9,7 @@ record(ai, "$(PREFIX):$(CHAN):ECE") {
     field(DTYP, "asynFloat64")
     field(DESC, "Ecenemic Ecelegical")
     field(SCAN, "I/O Intr")
-    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_EWE$(CHAN)")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_ECE$(CHAN)")
 }
 
 record(ai, "$(PREFIX):$(CHAN):I") {
@@ -17,4 +17,11 @@ record(ai, "$(PREFIX):$(CHAN):I") {
     field(DESC, "I think therfore I am")
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_I$(CHAN)")
+}
+
+record(stringin, "$(PREFIX):$(CHAN):TECH") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Technique Name")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH$(CHAN)")
 }
