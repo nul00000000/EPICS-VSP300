@@ -5,3 +5,10 @@ record(waveform, "$(PREFIX):PARAM:BOOLARR:$(INDEX)") {
     field(NELM, "2048")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PBOOLARR$(INDEX)")
 }
+
+record(stringin, "$(PREFIX):PARAM:BOOLARR:$(INDEX):LABEL") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Bool Array Param Name")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_LBOOLARR$(INDEX)")
+}

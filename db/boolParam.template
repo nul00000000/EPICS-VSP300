@@ -7,3 +7,10 @@ record(bo, "$(PREFIX):PARAM:BOOL:$(INDEX)") {
     field(VAL, "0")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PBOOL$(INDEX)")
 }
+
+record(stringin, "$(PREFIX):PARAM:BOOL:$(INDEX):LABEL") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Bool Param Name")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_LBOOL$(INDEX)")
+}

@@ -168,6 +168,9 @@ asynStatus BioLogicDriver::writeOctet(asynUser *pasynUser, const char *value, si
         TEccParams_t t{};
         TEccParam_t* params;
         if(string(value) == "ocv") {
+            setStringParam(blParams->singleLabels[0], "Rest_time_T");
+            setStringParam(blParams->singleLabels[1], "Record_every_dE");
+            setStringParam(blParams->singleLabels[2], "Record_every_dT");
             t.len = 3;
             params = new TEccParam_t[3];
             BL_DefineSglParameter("Rest_time_T", blParams->singleValues[0], 0, &params[0]);
@@ -313,7 +316,7 @@ BioLogicDriver::BioLogicDriver(const char* portName)
 {
     static const char* functionName = "BioLogicDriver";
 
-    blParams = new Params(3, 3, 3, 3, 3, 3);
+    blParams = new Params(3, 3, 3, 2, 0, 1);
 
     createParam(BioLogicDriverVersionString, asynParamOctet, &BioLogicDriverVersion);
 

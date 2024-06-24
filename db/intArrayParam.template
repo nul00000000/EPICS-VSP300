@@ -5,3 +5,10 @@ record(waveform, "$(PREFIX):PARAM:INTARR:$(INDEX)") {
     field(NELM, "2048")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PINTARR$(INDEX)")
 }
+
+record(stringin, "$(PREFIX):PARAM:INTARR:$(INDEX):LABEL") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Int Array Param Name")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_LINTARR$(INDEX)")
+}

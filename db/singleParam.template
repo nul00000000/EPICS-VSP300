@@ -4,3 +4,10 @@ record(ao, "$(PREFIX):PARAM:SINGLE:$(INDEX)") {
     field(PINI, "YES")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PSINGLE$(INDEX)")
 }
+
+record(stringin, "$(PREFIX):PARAM:SINGLE:$(INDEX):LABEL") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Single Param Name")
+    field(SCAN, "I/O Intr")
+    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_LSINGLE$(INDEX)")
+}

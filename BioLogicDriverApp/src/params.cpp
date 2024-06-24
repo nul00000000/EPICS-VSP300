@@ -8,6 +8,13 @@ Params::Params(int numSingle, int numInt, int numBool, int numSingleArray, int n
     this->intArrays = new int[numIntArray];
     this->boolArrays = new int[numBoolArray];
 
+    this->singleLabels = new int[numSingle];
+    this->intLabels = new int[numInt];
+    this->boolLabels = new int[numBool];
+    this->singleArrayLabels = new int[numSingleArray];
+    this->intArrayLabels = new int[numIntArray];
+    this->boolArrayLabels = new int[numBoolArray];
+
     this->singleValues = new double[numSingle];
     this->intValues = new int[numInt];
     this->boolValues = new bool[numBool];
@@ -30,6 +37,13 @@ Params::~Params() {
     delete[] singleArrays;
     delete[] intArrays;
     delete[] boolArrays;
+
+    delete[] singleLabels;
+    delete[] intLabels;
+    delete[] boolLabels;
+    delete[] singleArrayLabels;
+    delete[] intArrayLabels;
+    delete[] boolArrayLabels;
 
     delete[] singleValues;
     delete[] intValues;
@@ -56,6 +70,8 @@ void Params::createParams(asynPortDriver* driver) {
     for(int i = 0; i < numSingle; i++) {
         snprintf(substitutions, 40, "VSP_PSINGLE%d", i);
         driver->createParam(substitutions, asynParamFloat64, &singles[i]);
+        snprintf(substitutions, 40, "VSP_LSINGLE%d", i);
+        driver->createParam(substitutions, asynParamOctet, &singleLabels[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/singleParam.template", substitutions);
@@ -64,6 +80,8 @@ void Params::createParams(asynPortDriver* driver) {
     for(int i = 0; i < numInt; i++) {
         snprintf(substitutions, 40, "VSP_PINT%d", i);
         driver->createParam(substitutions, asynParamInt32, &ints[i]);
+        snprintf(substitutions, 40, "VSP_LINT%d", i);
+        driver->createParam(substitutions, asynParamOctet, &intLabels[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/intParam.template", substitutions);
@@ -72,6 +90,8 @@ void Params::createParams(asynPortDriver* driver) {
     for(int i = 0; i < numBool; i++) {
         snprintf(substitutions, 40, "VSP_PBOOL%d", i);
         driver->createParam(substitutions, asynParamInt32, &bools[i]);
+        snprintf(substitutions, 40, "VSP_LBOOL%d", i);
+        driver->createParam(substitutions, asynParamOctet, &boolLabels[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/boolParam.template", substitutions);
@@ -80,6 +100,8 @@ void Params::createParams(asynPortDriver* driver) {
     for(int i = 0; i < numSingleArray; i++) {
         snprintf(substitutions, 40, "VSP_PSINGLEARR%d", i);
         driver->createParam(substitutions, asynParamOctet, &singleArrays[i]);
+        snprintf(substitutions, 40, "VSP_LSINGLEARR%d", i);
+        driver->createParam(substitutions, asynParamOctet, &singleArrayLabels[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/singleArrayParam.template", substitutions);
@@ -88,6 +110,8 @@ void Params::createParams(asynPortDriver* driver) {
     for(int i = 0; i < numIntArray; i++) {
         snprintf(substitutions, 40, "VSP_PINTARR%d", i);
         driver->createParam(substitutions, asynParamOctet, &intArrays[i]);
+        snprintf(substitutions, 40, "VSP_LINTARR%d", i);
+        driver->createParam(substitutions, asynParamOctet, &intArrayLabels[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/intArrayParam.template", substitutions);
@@ -96,6 +120,8 @@ void Params::createParams(asynPortDriver* driver) {
     for(int i = 0; i < numBoolArray; i++) {
         snprintf(substitutions, 40, "VSP_PBOOLARR%d", i);
         driver->createParam(substitutions, asynParamOctet, &boolArrays[i]);
+        snprintf(substitutions, 40, "VSP_LBOOLARR%d", i);
+        driver->createParam(substitutions, asynParamOctet, &boolArrayLabels[i]);
 
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/boolArrayParam.template", substitutions);
