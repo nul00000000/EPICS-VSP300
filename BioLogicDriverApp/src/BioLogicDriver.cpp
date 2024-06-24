@@ -92,6 +92,8 @@ Channel BioLogicDriver::createChannel(int id) {
     createParam(sampleString, asynParamFloat64, &c.ece);
     snprintf(sampleString, 40, "%s%d", I_STRING, id);
     createParam(sampleString, asynParamFloat64, &c.I);
+    snprintf(sampleString, 40, "%s%d", TECH_STRING, id);
+    createParam(sampleString, asynParamOctet, &c.technique);
 
     return c;
 }
@@ -117,9 +119,6 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     if (status) {
         ERR_ARGS("ERROR status=%d, function=%d, value=%d", status, function, value);
         return asynError;
-    } else {  // Don't log period checkStatus PV processing
-        status = setIntegerParam(function, value);
-        LOG_ARGS("function=%d value=%d", function, value);
     }
     callParamCallbacks();
     return asynSuccess;
@@ -140,13 +139,59 @@ asynStatus BioLogicDriver::writeFloat64(asynUser* pasynUser, epicsFloat64 value)
     static const char* functionName = "writeFloat64";
     if (function < FIRST_BIOLOGICDRIVER_PARAM) {
         status = asynPortDriver::writeFloat64(pasynUser, value);
+    } else {
+        for(int i = 0; i < blParams->numSingle; i++) {
+            if(function == blParams->singles[i]) {
+                blParams->singleValues[i] = value;
+            }
+        }
     }
 
     if (status) {
         ERR_ARGS("ERROR status=%d, function=%d, value=%f", status, function, value);
+    }
+
+    callParamCallbacks();
+    return status;
+}
+
+asynStatus BioLogicDriver::writeOctet(asynUser *pasynUser, const char *value, size_t maxChars, size_t *nActual) {
+    int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
+    static const char* functionName = "writeOctet";
+
+    if (function < FIRST_BIOLOGICDRIVER_PARAM) {
+        status = asynPortDriver::writeOctet(pasynUser, value, maxChars, nActual);
+    } else if(function == techniqueNum) {
+        string fullPath = "C:/EC-Lab Development Package/EC-Lab Development Package/" + string(value) + "4.ecc";
+
+        TEccParams_t t{};
+        TEccParam_t* params;
+        if(string(value) == "ocv") {
+            t.len = 3;
+            params = new TEccParam_t[3];
+            BL_DefineSglParameter("Rest_time_T", blParams->singleValues[0], 0, &params[0]);
+            BL_DefineSglParameter("Record_every_dE", blParams->singleValues[1], 0, &params[1]);
+            BL_DefineSglParameter("Record_every_dT", blParams->singleValues[2], 0, &params[2]);
+        } else {
+            printf("Unrecognized technique: %s\n", value);
+        }
+        t.pParams = params;
+
+        // BL_LoadTechnique(deviceID, channels[i].id, fullPath.c_str(), t, false, false, false);
+
+        printf("Loaded Technique: %s with params: \n", value);
+        for(int i = 0; i < t.len; i++) {
+            printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
+        }
     } else {
-        status = setDoubleParam(function, value);
-        LOG_ARGS("function=%d value=%f", function, value);
+        for(int i = 0; i < numChannels; i++) {
+            
+        }
+    }
+
+    if (status) {
+        ERR_ARGS("ERROR status=%d, function=%d, value=%f", status, function, value);
     }
 
     callParamCallbacks();
@@ -173,7 +218,13 @@ void BioLogicDriver::report(FILE* fp, int details) {
 }
 
 void BioLogicDriver::setupConnection() {
-    BL_Connect("USB0", 5, &deviceID, &deviceInfo); //remember to change this you fool
+    int code = BL_Connect("USB0", 5, &deviceID, &deviceInfo); //remember to change this you fool
+
+    if(code) {
+        numChannels = 0;
+        this->channels = new Channel[0];
+        return;
+    }
 
     printf("VSP-300 Connected with ID: %d, Version: %d\n", deviceID, deviceInfo.FirmwareVersion);
 
@@ -193,7 +244,7 @@ void BioLogicDriver::setupConnection() {
 
     int index = 0;
 
-    for(int i = 0; i < MAX_CHANNELS; i++) {
+    for(int i = 0; i < numChannels; i++) {
         this->channels[index] = createChannel(i);
         this->channels[index].id = i;
         index++;
@@ -215,17 +266,25 @@ void BioLogicDriver::setupInitialValues() {
 
 void BioLogicDriver::updateValues() {
     TCurrentValues_t currentValues;
+    TExperimentInfos_t expInfo;
 
-    for(int i = 0; i < numChannels; i++) {
-        int code = BL_GetCurrentValues(deviceID, channels[i].id, &currentValues);
-        if(code) {
+    // for(int i = 0; i < numChannels; i++) {
+    //     int code = BL_GetCurrentValues(deviceID, channels[i].id, &currentValues);
+    //     if(code) {
+    //         printf("ERROR: Could not get channel values on channel %d\n", channels[i].id);
+    //     } else {
+    //         setDoubleParam(channels[i].ewe, currentValues.Ewe);
+    //         setDoubleParam(channels[i].ece, currentValues.Ece);
+    //         setDoubleParam(channels[i].I, currentValues.I);
+    //     }
 
-        } else {
-            setDoubleParam(channels[i].ewe, currentValues.Ewe);
-            setDoubleParam(channels[i].ece, currentValues.Ece);
-            setDoubleParam(channels[i].I, currentValues.I);
-        }
-    }
+    //     code = BL_GetExperimentInfos(deviceID, channels[i].id, &expInfo);
+    //     if(code) {
+    //         printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
+    //     } else {
+    //         setStringParam(channels[i].technique, expInfo.Filename);
+    //     }
+    // }
 
     callParamCallbacks();
 }
@@ -254,6 +313,8 @@ BioLogicDriver::BioLogicDriver(const char* portName)
 {
     static const char* functionName = "BioLogicDriver";
 
+    blParams = new Params(3, 3, 3, 3, 3, 3);
+
     createParam(BioLogicDriverVersionString, asynParamOctet, &BioLogicDriverVersion);
 
     setupConnection();
@@ -261,6 +322,9 @@ BioLogicDriver::BioLogicDriver(const char* portName)
     createParam(ID_STRING, asynParamInt32, &idNum);
     createParam(NCHAN_STRING, asynParamInt32, &nchanNum);
     createParam(VERSION_STRING, asynParamInt32, &versionNum);
+    createParam(TECH_STRING, asynParamOctet, &techniqueNum);
+
+    blParams->createParams(this);
 
     char* substitutions = new char[40];
     for(int i = 0; i < numChannels; i++) {

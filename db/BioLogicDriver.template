@@ -25,3 +25,10 @@ record(ai, "$(PREFIX):VERSION") {
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_VERSION")
 }
+
+record(stringout, "$(PREFIX):TECH:SET") {
+    field(DTYP, "asynOctetWrite")
+    field(DESC, "Set Technique Name")
+    field(PINI, "YES")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH")
+}

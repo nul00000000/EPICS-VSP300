@@ -1,0 +1,5 @@
+record(waveform, "$(PREFIX):PARAM:INTARR:$(INDEX)") {
+    field(DTYP, "asynInt32ArrayOut")
+    field(DESC, "Int Array Param")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_PINTARR$(INDEX)")
+}

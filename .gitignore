@@ -10,3 +10,4 @@ BioLogicDriver.lib
 BLFunctions.h
 BLStructs.h
 *.exe
+*.exe.*

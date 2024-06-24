@@ -18,3 +18,10 @@ record(ai, "$(PREFIX):$(CHAN):I") {
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_I$(CHAN)")
 }
+
+record(stringin, "$(PREFIX):$(CHAN):TECH") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Technique Name")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH$(CHAN)")
+}
