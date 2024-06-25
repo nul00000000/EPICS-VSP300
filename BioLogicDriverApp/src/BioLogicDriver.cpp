@@ -163,30 +163,19 @@ asynStatus BioLogicDriver::writeOctet(asynUser *pasynUser, const char *value, si
     if (function < FIRST_BIOLOGICDRIVER_PARAM) {
         status = asynPortDriver::writeOctet(pasynUser, value, maxChars, nActual);
     } else if(function == techniqueNum) {
-        string fullPath = "C:/EC-Lab Development Package/EC-Lab Development Package/" + string(value) + "4.ecc";
+        // string fullPath = "C:/EC-Lab Development Package/EC-Lab Development Package/" + string(value) + "4.ecc";
 
-        TEccParams_t t{};
-        TEccParam_t* params;
-        if(string(value) == "ocv") {
-            setStringParam(blParams->singleLabels[0], "Rest_time_T");
-            setStringParam(blParams->singleLabels[1], "Record_every_dE");
-            setStringParam(blParams->singleLabels[2], "Record_every_dT");
-            t.len = 3;
-            params = new TEccParam_t[3];
-            BL_DefineSglParameter("Rest_time_T", blParams->singleValues[0], 0, &params[0]);
-            BL_DefineSglParameter("Record_every_dE", blParams->singleValues[1], 0, &params[1]);
-            BL_DefineSglParameter("Record_every_dT", blParams->singleValues[2], 0, &params[2]);
-        } else {
-            printf("Unrecognized technique: %s\n", value);
-        }
-        t.pParams = params;
+        // TEccParams_t t{};
+        // TEccParam_t* params;
+
+        blParams->setupParamsForTech(string(value));
 
         // BL_LoadTechnique(deviceID, channels[i].id, fullPath.c_str(), t, false, false, false);
 
-        printf("Loaded Technique: %s with params: \n", value);
-        for(int i = 0; i < t.len; i++) {
-            printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
-        }
+        // printf("Loaded Technique: %s with params: \n", value);
+        // for(int i = 0; i < t.len; i++) {
+        //     printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
+        // }
     } else {
         for(int i = 0; i < numChannels; i++) {
             
@@ -316,7 +305,7 @@ BioLogicDriver::BioLogicDriver(const char* portName)
 {
     static const char* functionName = "BioLogicDriver";
 
-    blParams = new Params(3, 3, 3, 2, 0, 1);
+    blParams = new Params(10, 4, 4, 5, 4, 2, this);
 
     createParam(BioLogicDriverVersionString, asynParamOctet, &BioLogicDriverVersion);
 
@@ -327,7 +316,7 @@ BioLogicDriver::BioLogicDriver(const char* portName)
     createParam(VERSION_STRING, asynParamInt32, &versionNum);
     createParam(TECH_STRING, asynParamOctet, &techniqueNum);
 
-    blParams->createParams(this);
+    blParams->createParams();
 
     char* substitutions = new char[40];
     for(int i = 0; i < numChannels; i++) {
