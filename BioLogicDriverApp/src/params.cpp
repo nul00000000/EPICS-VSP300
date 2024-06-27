@@ -26,6 +26,25 @@ Params::Params(int numSingle, int numInt, int numBool,
     this->intArrayValues = new int*[numIntArray];
     this->boolArrayValues = new bool*[numBoolArray];
 
+    for(int i = 0; i < numSingle; i++) {
+        singleValues[i] = 0;
+    }
+    for(int i = 0; i < numInt; i++) {
+        intValues[i] = 0;
+    }
+    for(int i = 0; i < numBool; i++) {
+        boolValues[i] = 0;
+    }
+    for(int i = 0; i < numSingleArray; i++) {
+        singleArrayValues[i] = nullptr;
+    }
+    for(int i = 0; i < numIntArray; i++) {
+        intArrayValues[i] = nullptr;
+    }
+    for(int i = 0; i < numBoolArray; i++) {
+        boolArrayValues[i] = nullptr;
+    }
+
     this->numSingle = numSingle;
     this->numInt = numInt;
     this->numBool = numBool;
@@ -36,6 +55,21 @@ Params::Params(int numSingle, int numInt, int numBool,
     this->singleArrayLengths = new int[numSingleArray];
     this->intArrayLengths = new int[numIntArray];
     this->boolArrayLengths = new int[numBoolArray];
+
+    this->singleNames = new string[numSingle];
+    this->intNames = new string[numInt];
+    this->boolNames = new string[numBool];
+    this->singleArrayNames = new string[numSingleArray];
+    this->intArrayNames = new string[numIntArray];
+    this->boolArrayNames = new string[numBoolArray];
+
+    sIndex = 0;
+    iIndex = 0;
+    bIndex = 0;
+    saIndex = 0;
+    iaIndex = 0;
+    baIndex = 0;
+    ready = false;
 }
 
 Params::~Params() {
@@ -56,6 +90,13 @@ Params::~Params() {
     delete[] singleValues;
     delete[] intValues;
     delete[] boolValues;
+
+    delete[] singleNames;
+    delete[] intNames;
+    delete[] boolNames;
+    delete[] singleArrayNames;
+    delete[] intArrayNames;
+    delete[] boolArrayNames;
     
     for(int i = 0; i < numSingleArray; i++) {
         delete[] singleArrayValues[i];
@@ -138,8 +179,93 @@ void Params::createParams() {
         snprintf(substitutions, 40, "PREFIX=DEV:VSP, PORT=%s, INDEX=%d", driver->portName, i);
         dbLoadRecords("$(BIOLOGICDRIVER)/db/boolArrayParam.template", substitutions);
     }
+
+    ready = true;
 }
 
+void Params::updateValue(int function, void* value) {
+    for(int i = 0; i < sIndex; i++) {
+        if(function == singles[i]) {
+            singleValues[i] = *((double*) value);
+        }
+    }
+    for(int i = 0; i < iIndex; i++) {
+        if(function == ints[i]) {
+            intValues[i] = *((int*) value);
+        }
+    }
+    for(int i = 0; i < bIndex; i++) {
+        if(function == bools[i]) {
+            int intValue = *((int*) value);
+            boolValues[i] = intValue;
+        }
+    }
+}
+
+void Params::updateArrayValue(int function, string values) {
+    string work = values;
+    for(int i = 0; i < saIndex; i++) {
+        if(function == singleArrays[i]) {
+            if(singleArrayValues[i]) {
+                delete[] singleArrayValues[i];
+            }
+            vector<double> vals;
+            size_t commaIndex = 0;
+            while(commaIndex != string::npos) {
+                commaIndex = work.find_first_of(',');
+                string element = work.substr(0, commaIndex);
+                work = work.substr(commaIndex + 1);
+                vals.push_back(stod(element));
+            }
+            singleArrayValues[i] = vals.data();
+            singleArrayLengths[i] = vals.size();
+            return;
+        }
+    }
+    for(int i = 0; i < iaIndex; i++) {
+        if(function == intArrays[i]) {
+            if(intArrayValues[i]) {
+                delete[] intArrayValues[i];
+            }
+            vector<int> vals;
+            size_t commaIndex = 0;
+            while(commaIndex != string::npos) {
+                commaIndex = work.find_first_of(',');
+                string element = work.substr(0, commaIndex);
+                work = work.substr(commaIndex + 1);
+                vals.push_back(stoi(element));
+            }
+            intArrayValues[i] = vals.data();
+            intArrayLengths[i] = vals.size();
+            return;
+        }
+    }
+    for(int i = 0; i < baIndex; i++) {
+        if(function == boolArrays[i]) {
+            if(boolArrayValues[i]) {
+                delete[] boolArrayValues[i];
+            }
+            vector<bool> vals;
+            size_t commaIndex = 0;
+            while(commaIndex != string::npos) {
+                commaIndex = work.find_first_of(',');
+                string element = work.substr(0, commaIndex);
+                work = work.substr(commaIndex + 1);
+                vals.push_back(stoi(element));
+            }
+            //me when vector<bool> doesn't have .data for memory optimization
+            bool* b = new bool[vals.size()];
+            for(int i = 0; i < vals.size(); i++) {
+                b[i] = vals[i];
+            }
+            boolArrayValues[i] = b;
+            boolArrayLengths[i] = vals.size();
+            return;
+        }
+    }
+}
+
+//this will not clear the names variables so make sure you've got those indexes well tracked
 void Params::clearLabels() {
     sIndex = 0;
     iIndex = 0;
@@ -158,42 +284,51 @@ void Params::clearLabels() {
     }
     for(int i = 0; i < numSingleArray; i++) {
         driver->setStringParam(singleArrayLabels[i], "");
+        singleArrayLengths[i] = 0;
     }
     for(int i = 0; i < numIntArray; i++) {
         driver->setStringParam(intArrayLabels[i], "");
+        intArrayLengths[i] = 0;
     }
     for(int i = 0; i < numBoolArray; i++) {
         driver->setStringParam(boolArrayLabels[i], "");
+        boolArrayLengths[i] = 0;
     }
 }
 
 void Params::addSLabel(string label) {
     driver->setStringParam(singleLabels[sIndex], label);
+    singleNames[sIndex] = label;
     sIndex++;
 }
 
 void Params::addILabel(string label) {
     driver->setStringParam(intLabels[iIndex], label);
+    intNames[iIndex] = label;
     iIndex++;
 }
 
 void Params::addBLabel(string label) {
     driver->setStringParam(boolLabels[bIndex], label);
+    boolNames[bIndex] = label;
     bIndex++;
 }
 
 void Params::addSALabel(string label) {
     driver->setStringParam(singleArrayLabels[saIndex], label);
+    singleArrayNames[saIndex] = label;
     saIndex++;
 }
 
 void Params::addIALabel(string label) {
     driver->setStringParam(intArrayLabels[iaIndex], label);
+    intArrayNames[iaIndex] = label;
     iaIndex++;
 }
 
 void Params::addBALabel(string label) {
     driver->setStringParam(boolArrayLabels[baIndex], label);
+    boolArrayNames[baIndex] = label;
     baIndex++;
 }
 
@@ -570,4 +705,55 @@ void Params::setupParamsForTech(string name) {
     } else {
         printf("Unrecognized technique: %s\n", name);
     }
+}
+
+TEccParams_t Params::getEccParams() {
+    // t.len = 3;
+        // params = new TEccParam_t[t.len];
+        // BL_DefineSglParameter("Rest_time_T", blParams->singleValues[0], 0, &params[0]);
+        // BL_DefineSglParameter("Record_every_dE", blParams->singleValues[1], 0, &params[1]);
+        // BL_DefineSglParameter("Record_every_dT", blParams->singleValues[2], 0, &params[2]);
+    TEccParams_t r{};
+    vector<TEccParam_t> params;
+    for(int i = 0; i < sIndex; i++) {
+        TEccParam_t p;
+        BL_DefineSglParameter(singleNames[i].c_str(), singleValues[i], 0, &p);
+        params.push_back(p);
+    }
+    for(int i = 0; i < iIndex; i++) {
+        TEccParam_t p;
+        BL_DefineIntParameter(intNames[i].c_str(), intValues[i], 0, &p);
+        params.push_back(p);
+    }
+    for(int i = 0; i < bIndex; i++) {
+        TEccParam_t p;
+        BL_DefineBoolParameter(boolNames[i].c_str(), boolValues[i], 0, &p);
+        params.push_back(p);
+    }
+    //you FOOL dont you know for arrays each element in the array is its OWN TEccParam??? (gonna explode)
+    for(int i = 0; i < saIndex; i++) {
+        for(int j = 0; j < singleArrayLengths[i]; j++) {
+            TEccParam_t p;
+            BL_DefineSglParameter(singleArrayNames[i].c_str(), singleArrayValues[i][j], j, &p);
+            params.push_back(p);
+        }
+    }
+    for(int i = 0; i < iaIndex; i++) {
+        for(int j = 0; j < intArrayLengths[i]; j++) {
+            TEccParam_t p;
+            BL_DefineIntParameter(intArrayNames[i].c_str(), intArrayValues[i][j], j, &p);
+            params.push_back(p);
+        }
+    }
+    for(int i = 0; i < baIndex; i++) {
+        for(int j = 0; j < boolArrayLengths[i]; j++) {
+            TEccParam_t p;
+            BL_DefineBoolParameter(boolArrayNames[i].c_str(), boolArrayValues[i][j], j, &p);
+            params.push_back(p);
+        }
+    }
+    r.len = params.size();
+    r.pParams = params.data();
+
+    return r;
 }

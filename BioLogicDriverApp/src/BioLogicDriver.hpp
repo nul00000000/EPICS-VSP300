@@ -3,6 +3,7 @@
 #include <asynPortDriver.h>
 #include <epicsExport.h>
 #include <iocsh.h>
+#include <string>
 
 #include <BLStructs.h>
 #include <BLFunctions.h>
@@ -21,6 +22,8 @@
 #define ID_STRING "VSP_ID"
 #define NCHAN_STRING "VSP_NCHAN"
 #define VERSION_STRING "VSP_VERSION"
+#define UPLOAD_STRING "VSP_UPLOAD"
+#define CHAN_STRING "VSP_CHAN"
 
 #define EWE_STRING "VSP_EWE"
 #define ECE_STRING "VSP_ECE"
@@ -67,6 +70,11 @@ private:
     int nchanNum;
     int versionNum;
     int techniqueNum;
+    int uploadNum;
+    int chanNum;
+
+    std::string currentTechnique;
+    int currentChannel;
 
     Channel createChannel(int id);
     void setupConnection();

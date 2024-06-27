@@ -32,3 +32,18 @@ record(stringout, "$(PREFIX):TECH:SET") {
     field(PINI, "YES")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH")
 }
+
+record(bo, "$(PREFIX):UPLOAD:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Bool Param")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_UPLOAD")
+}
+
+record(ao, "$(PREFIX):CHAN:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Channel Selection")
+    field(PINI, "YES")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_CHAN")
+}

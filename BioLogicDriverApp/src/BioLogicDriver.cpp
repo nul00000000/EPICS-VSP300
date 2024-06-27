@@ -114,6 +114,27 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     if (function < FIRST_BIOLOGICDRIVER_PARAM) {
         status = asynPortDriver::writeInt32(pasynUser, value);
+    } else if(function == uploadNum) {
+        printf(currentTechnique.c_str());
+        printf("Uploading technique: %s\n", currentTechnique.c_str());
+        string fullPath = "C:/EC-Lab Development Package/EC-Lab Development Package/" + currentTechnique + "4.ecc";
+
+        TEccParams_t t = blParams->getEccParams();
+
+        // BL_LoadTechnique(deviceID, currentChannel, fullPath.c_str(), t, false, false, false);
+
+        printf("Loaded Params:\n");
+        for(int i = 0; i < t.len; i++) {
+            printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
+        }
+    } else if(function == chanNum) {
+        this->currentChannel = value;
+    } else {
+        if(blParams) {
+            blParams->updateValue(function, &value);
+        } else {
+            printf("blParams accessed before being initialized");
+        }
     }
 
     if (status) {
@@ -140,10 +161,10 @@ asynStatus BioLogicDriver::writeFloat64(asynUser* pasynUser, epicsFloat64 value)
     if (function < FIRST_BIOLOGICDRIVER_PARAM) {
         status = asynPortDriver::writeFloat64(pasynUser, value);
     } else {
-        for(int i = 0; i < blParams->numSingle; i++) {
-            if(function == blParams->singles[i]) {
-                blParams->singleValues[i] = value;
-            }
+        if(blParams && blParams->ready) {
+            blParams->updateValue(function, &value);
+        } else {
+            printf("blParams accessed before ready");
         }
     }
 
@@ -163,29 +184,15 @@ asynStatus BioLogicDriver::writeOctet(asynUser *pasynUser, const char *value, si
     if (function < FIRST_BIOLOGICDRIVER_PARAM) {
         status = asynPortDriver::writeOctet(pasynUser, value, maxChars, nActual);
     } else if(function == techniqueNum) {
-        // string fullPath = "C:/EC-Lab Development Package/EC-Lab Development Package/" + string(value) + "4.ecc";
-
-        // TEccParams_t t{};
-        // TEccParam_t* params;
-
-        blParams->setupParamsForTech(string(value));
-
-        // BL_LoadTechnique(deviceID, channels[i].id, fullPath.c_str(), t, false, false, false);
-
-        // printf("Loaded Technique: %s with params: \n", value);
-        // for(int i = 0; i < t.len; i++) {
-        //     printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
-        // }
+        currentTechnique = string(value);
+        blParams->setupParamsForTech(currentTechnique);
     } else {
-        for(int i = 0; i < numChannels; i++) {
-            
-        }
+        blParams->updateArrayValue(function, string(value));
     }
 
     if (status) {
         ERR_ARGS("ERROR status=%d, function=%d, value=%f", status, function, value);
     }
-
     callParamCallbacks();
     return status;
 }
@@ -305,9 +312,12 @@ BioLogicDriver::BioLogicDriver(const char* portName)
 {
     static const char* functionName = "BioLogicDriver";
 
+    currentTechnique = "unset";
     blParams = new Params(10, 4, 4, 5, 4, 2, this);
 
     createParam(BioLogicDriverVersionString, asynParamOctet, &BioLogicDriverVersion);
+
+    blParams->createParams();
 
     setupConnection();
 
@@ -315,8 +325,8 @@ BioLogicDriver::BioLogicDriver(const char* portName)
     createParam(NCHAN_STRING, asynParamInt32, &nchanNum);
     createParam(VERSION_STRING, asynParamInt32, &versionNum);
     createParam(TECH_STRING, asynParamOctet, &techniqueNum);
-
-    blParams->createParams();
+    createParam(UPLOAD_STRING, asynParamInt32, &uploadNum);
+    createParam(CHAN_STRING, asynParamInt32, &chanNum);
 
     char* substitutions = new char[40];
     for(int i = 0; i < numChannels; i++) {
