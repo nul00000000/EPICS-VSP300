@@ -204,11 +204,14 @@ void Params::updateValue(int function, void* value) {
 
 void Params::updateArrayValue(int function, string values) {
     string work = values;
+    printf("at the copa\n");
     for(int i = 0; i < saIndex; i++) {
         if(function == singleArrays[i]) {
+            printf("her name was lola");
             if(singleArrayValues[i]) {
                 delete[] singleArrayValues[i];
             }
+            printf("she was a showgirl");
             vector<double> vals;
             size_t commaIndex = 0;
             while(commaIndex != string::npos) {
@@ -217,11 +220,14 @@ void Params::updateArrayValue(int function, string values) {
                 work = work.substr(commaIndex + 1);
                 vals.push_back(stod(element));
             }
+            printf("with something something in her hair");
             singleArrayValues[i] = vals.data();
             singleArrayLengths[i] = vals.size();
+            printf("something something air");
             return;
         }
     }
+    printf("copacabana\n");
     for(int i = 0; i < iaIndex; i++) {
         if(function == intArrays[i]) {
             if(intArrayValues[i]) {
@@ -240,6 +246,7 @@ void Params::updateArrayValue(int function, string values) {
             return;
         }
     }
+    printf("the hottest spot north of havana (here)\n");
     for(int i = 0; i < baIndex; i++) {
         if(function == boolArrays[i]) {
             if(boolArrayValues[i]) {
@@ -263,6 +270,7 @@ void Params::updateArrayValue(int function, string values) {
             return;
         }
     }
+    printf("music and passion are always in fashion at the cooooooopaaaaaa\n");
 }
 
 //this will not clear the names variables so make sure you've got those indexes well tracked
@@ -717,6 +725,7 @@ TEccParams_t Params::getEccParams() {
     vector<TEccParam_t> params;
     for(int i = 0; i < sIndex; i++) {
         TEccParam_t p;
+        // BL_DefineSglParameter("poop", singleValues[i], 0, &p);
         BL_DefineSglParameter(singleNames[i].c_str(), singleValues[i], 0, &p);
         params.push_back(p);
     }

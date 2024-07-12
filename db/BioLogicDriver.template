@@ -35,7 +35,7 @@ record(stringout, "$(PREFIX):TECH:SET") {
 
 record(bo, "$(PREFIX):UPLOAD:SET") {
     field(DTYP, "asynInt32")
-    field(DESC, "Bool Param")
+    field(DESC, "Upload Technique")
     field(PINI, "YES")
     field(VAL, "0")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_UPLOAD")
@@ -46,4 +46,21 @@ record(ao, "$(PREFIX):CHAN:SET") {
     field(DESC, "Channel Selection")
     field(PINI, "YES")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_CHAN")
+}
+
+record(waveform, "$(PREFIX):STATUS") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Status message")
+    field(FTVL, "CHAR")
+    field(NELM, "2048")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_STATUS")
+}
+
+record(bo, "$(PREFIX):START:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Start Technique")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_START")
 }

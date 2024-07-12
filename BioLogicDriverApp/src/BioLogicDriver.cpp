@@ -82,6 +82,8 @@ static void exitCallbackC(void* pPvt) {
     delete pBioLogicDriver;
 }
 
+
+
 Channel BioLogicDriver::createChannel(int id) {
     Channel c;
     c.id = id;
@@ -98,6 +100,18 @@ Channel BioLogicDriver::createChannel(int id) {
     return c;
 }
 
+void BioLogicDriver::setStatusMessage(char* msg) {
+    printf("%s\n", msg);
+    this->setStringParam(statusNum, msg);
+
+    callParamCallbacks();
+}
+
+void BioLogicDriver::setStatusMessage(std::string msg) {
+    printf("%s\n", msg.c_str());
+    this->setStringParam(statusNum, msg);
+    callParamCallbacks();
+}
 
 /*
  * Function overwriting asynPortDriver base function.
@@ -115,20 +129,36 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     if (function < FIRST_BIOLOGICDRIVER_PARAM) {
         status = asynPortDriver::writeInt32(pasynUser, value);
     } else if(function == uploadNum) {
-        printf(currentTechnique.c_str());
-        printf("Uploading technique: %s\n", currentTechnique.c_str());
-        string fullPath = "C:/EC-Lab Development Package/EC-Lab Development Package/" + currentTechnique + "4.ecc";
+        if(currentTechnique != "unset") {
+            setStatusMessage("Uploading technique: " + currentTechnique + "\n");
+            string fullPath = "C:\\EC-Lab Development Package\\EC-Lab Development Package\\" + currentTechnique + "4.ecc";
 
-        TEccParams_t t = blParams->getEccParams();
+            TEccParams_t t = blParams->getEccParams();
 
-        // BL_LoadTechnique(deviceID, currentChannel, fullPath.c_str(), t, false, false, false);
+            int error = BL_LoadTechnique(deviceID, currentChannel, const_cast<char*>(fullPath.c_str()), t, true, true, true);
+            if(error) {
+                setStatusMessage(std::string("Uploading error: " + std::to_string(error)));
+            }
 
-        printf("Loaded Params:\n");
-        for(int i = 0; i < t.len; i++) {
-            printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
+            TExperimentInfos_t info;
+            BL_GetExperimentInfos(deviceID, currentChannel, &info);
+            
+            printf("techniqued success with filename: %s", info.Filename);
+
+            printf("Loaded Params:\n");
+            for(int i = 0; i < t.len; i++) {
+                printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
+            }
         }
     } else if(function == chanNum) {
         this->currentChannel = value;
+    } else if(function == startNum) {
+        int error = BL_StartChannel(deviceID, currentChannel);
+        if(error) {
+            setStatusMessage(std::string("Failed to start technique: ") + std::to_string(error)); 
+        } else {
+            setStatusMessage("Started Technique");
+        }
     } else {
         if(blParams) {
             blParams->updateValue(function, &value);
@@ -250,9 +280,11 @@ void BioLogicDriver::setupConnection() {
     }
 
     printf("Flashing VSP-300 firmware...\n");
+    setStatusMessage("Flashing VSP-300 firmware...");
     BL_LoadFirmware(deviceID, plugged, results, MAX_CHANNELS, false, true, 
             "C:/EC-Lab Development Package/EC-Lab Development Package/kernel4.bin", 
             "C:/EC-Lab Development Package/EC-Lab Development Package/Vmp_iv_0395_aa.xlx");
+    setStatusMessage("Firmware uploaded");
 }
 
 void BioLogicDriver::setupInitialValues() {
@@ -263,27 +295,34 @@ void BioLogicDriver::setupInitialValues() {
     updateValues();
 }
 
+char* msg;
+unsigned int* msgSize;
+
 void BioLogicDriver::updateValues() {
     TCurrentValues_t currentValues;
     TExperimentInfos_t expInfo;
 
-    // for(int i = 0; i < numChannels; i++) {
-    //     int code = BL_GetCurrentValues(deviceID, channels[i].id, &currentValues);
-    //     if(code) {
-    //         printf("ERROR: Could not get channel values on channel %d\n", channels[i].id);
-    //     } else {
-    //         setDoubleParam(channels[i].ewe, currentValues.Ewe);
-    //         setDoubleParam(channels[i].ece, currentValues.Ece);
-    //         setDoubleParam(channels[i].I, currentValues.I);
-    //     }
+    for(int i = 0; i < numChannels; i++) {
+        int code = BL_GetCurrentValues(deviceID, channels[i].id, &currentValues);
+        if(code) {
+            printf("ERROR: Could not get channel values on channel %d\n", channels[i].id);
+        } else {
+            setDoubleParam(channels[i].ewe, currentValues.Ewe);
+            setDoubleParam(channels[i].ece, currentValues.Ece);
+            setDoubleParam(channels[i].I, currentValues.I);
+        }
 
-    //     code = BL_GetExperimentInfos(deviceID, channels[i].id, &expInfo);
-    //     if(code) {
-    //         printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
-    //     } else {
-    //         setStringParam(channels[i].technique, expInfo.Filename);
-    //     }
-    // }
+        code = BL_GetExperimentInfos(deviceID, channels[i].id, &expInfo);
+        if(code) {
+            printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
+        } else {
+            setStringParam(channels[i].technique, expInfo.Filename);
+        }
+        BL_GetMessage(deviceID, i, msg, msgSize);
+        if(msgSize > 0) {
+            printf("[MSG:%d] %s", i, msg);
+        }
+    }
 
     callParamCallbacks();
 }
@@ -327,6 +366,8 @@ BioLogicDriver::BioLogicDriver(const char* portName)
     createParam(TECH_STRING, asynParamOctet, &techniqueNum);
     createParam(UPLOAD_STRING, asynParamInt32, &uploadNum);
     createParam(CHAN_STRING, asynParamInt32, &chanNum);
+    createParam(STATUS_STRING, asynParamOctet, &statusNum);
+    createParam(START_STRING, asynParamInt32, &startNum);
 
     char* substitutions = new char[40];
     for(int i = 0; i < numChannels; i++) {
@@ -335,6 +376,7 @@ BioLogicDriver::BioLogicDriver(const char* portName)
         dbLoadRecords("$(BIOLOGICDRIVER)/db/channel.template", substitutions);
     }
     delete[] substitutions;
+    setStatusMessage("Params created");
 
     setupInitialValues();
 

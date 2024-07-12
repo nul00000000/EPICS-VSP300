@@ -24,6 +24,8 @@
 #define VERSION_STRING "VSP_VERSION"
 #define UPLOAD_STRING "VSP_UPLOAD"
 #define CHAN_STRING "VSP_CHAN"
+#define STATUS_STRING "VSP_STATUS"
+#define START_STRING "VSP_START"
 
 #define EWE_STRING "VSP_EWE"
 #define ECE_STRING "VSP_ECE"
@@ -50,6 +52,8 @@ public:
     virtual void report(FILE* fp, int details);
 
     void updateValues();
+    void setStatusMessage(char* msg);
+    void setStatusMessage(std::string msg);
 
 protected:
 
@@ -72,6 +76,8 @@ private:
     int techniqueNum;
     int uploadNum;
     int chanNum;
+    int statusNum;
+    int startNum;
 
     std::string currentTechnique;
     int currentChannel;
