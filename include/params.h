@@ -1,7 +1,9 @@
 #pragma once
 
-#include "BioLogicDriver.hpp"
+#include <BLStructs.h>
+#include <asynPortDriver.h>
 #include <dbAccessDefs.h>
+#include "technique.h"
 
 using namespace std;
 
@@ -50,7 +52,7 @@ class Params {
         void updateArrayValue(int function, string values);
         void clearLabels();
         void setupParamsForTech(string tech);
-        TEccParams_t getEccParams();
+        Technique buildTechnique(string name);
     private:
         asynPortDriver* driver;
 

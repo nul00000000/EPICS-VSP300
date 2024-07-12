@@ -204,14 +204,16 @@ void Params::updateValue(int function, void* value) {
 
 void Params::updateArrayValue(int function, string values) {
     string work = values;
-    printf("at the copa\n");
+    printf("1");
     for(int i = 0; i < saIndex; i++) {
         if(function == singleArrays[i]) {
-            printf("her name was lola");
+            printf("2");
             if(singleArrayValues[i]) {
+                printf("3 (%d)", (uint64_t) singleArrayValues[i]);
                 delete[] singleArrayValues[i];
+                singleArrayValues[i] = nullptr;
             }
-            printf("she was a showgirl");
+            printf("4");
             vector<double> vals;
             size_t commaIndex = 0;
             while(commaIndex != string::npos) {
@@ -220,18 +222,18 @@ void Params::updateArrayValue(int function, string values) {
                 work = work.substr(commaIndex + 1);
                 vals.push_back(stod(element));
             }
-            printf("with something something in her hair");
+            printf("5");
             singleArrayValues[i] = vals.data();
             singleArrayLengths[i] = vals.size();
-            printf("something something air");
+            printf("6");
             return;
         }
     }
-    printf("copacabana\n");
     for(int i = 0; i < iaIndex; i++) {
         if(function == intArrays[i]) {
             if(intArrayValues[i]) {
                 delete[] intArrayValues[i];
+                intArrayValues[i] = nullptr;
             }
             vector<int> vals;
             size_t commaIndex = 0;
@@ -246,11 +248,11 @@ void Params::updateArrayValue(int function, string values) {
             return;
         }
     }
-    printf("the hottest spot north of havana (here)\n");
     for(int i = 0; i < baIndex; i++) {
         if(function == boolArrays[i]) {
             if(boolArrayValues[i]) {
                 delete[] boolArrayValues[i];
+                boolArrayValues[i] = nullptr;
             }
             vector<bool> vals;
             size_t commaIndex = 0;
@@ -270,7 +272,6 @@ void Params::updateArrayValue(int function, string values) {
             return;
         }
     }
-    printf("music and passion are always in fashion at the cooooooopaaaaaa\n");
 }
 
 //this will not clear the names variables so make sure you've got those indexes well tracked
@@ -715,54 +716,32 @@ void Params::setupParamsForTech(string name) {
     }
 }
 
-TEccParams_t Params::getEccParams() {
-    // t.len = 3;
-        // params = new TEccParam_t[t.len];
-        // BL_DefineSglParameter("Rest_time_T", blParams->singleValues[0], 0, &params[0]);
-        // BL_DefineSglParameter("Record_every_dE", blParams->singleValues[1], 0, &params[1]);
-        // BL_DefineSglParameter("Record_every_dT", blParams->singleValues[2], 0, &params[2]);
-    TEccParams_t r{};
-    vector<TEccParam_t> params;
+Technique Params::buildTechnique(string name) {
+    Technique t(name);
     for(int i = 0; i < sIndex; i++) {
-        TEccParam_t p;
-        // BL_DefineSglParameter("poop", singleValues[i], 0, &p);
-        BL_DefineSglParameter(singleNames[i].c_str(), singleValues[i], 0, &p);
-        params.push_back(p);
+        t.addParam(singleNames[i], singleValues[i]);
     }
     for(int i = 0; i < iIndex; i++) {
-        TEccParam_t p;
-        BL_DefineIntParameter(intNames[i].c_str(), intValues[i], 0, &p);
-        params.push_back(p);
+        t.addParam(intNames[i], intValues[i]);
     }
     for(int i = 0; i < bIndex; i++) {
-        TEccParam_t p;
-        BL_DefineBoolParameter(boolNames[i].c_str(), boolValues[i], 0, &p);
-        params.push_back(p);
+        t.addParam(boolNames[i], boolValues[i]);
     }
     //you FOOL dont you know for arrays each element in the array is its OWN TEccParam??? (gonna explode)
     for(int i = 0; i < saIndex; i++) {
         for(int j = 0; j < singleArrayLengths[i]; j++) {
-            TEccParam_t p;
-            BL_DefineSglParameter(singleArrayNames[i].c_str(), singleArrayValues[i][j], j, &p);
-            params.push_back(p);
+            t.addParamArrayValue(singleArrayNames[i], singleArrayValues[i][j]);
         }
     }
     for(int i = 0; i < iaIndex; i++) {
         for(int j = 0; j < intArrayLengths[i]; j++) {
-            TEccParam_t p;
-            BL_DefineIntParameter(intArrayNames[i].c_str(), intArrayValues[i][j], j, &p);
-            params.push_back(p);
+            t.addParamArrayValue(intArrayNames[i], intArrayValues[i][j]);
         }
     }
     for(int i = 0; i < baIndex; i++) {
         for(int j = 0; j < boolArrayLengths[i]; j++) {
-            TEccParam_t p;
-            BL_DefineBoolParameter(boolArrayNames[i].c_str(), boolArrayValues[i][j], j, &p);
-            params.push_back(p);
+            t.addParamArrayValue(boolArrayNames[i], boolArrayValues[i][j]);
         }
     }
-    r.len = params.size();
-    r.pParams = params.data();
-
-    return r;
+    return t;
 }

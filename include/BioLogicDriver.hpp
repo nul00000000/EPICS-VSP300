@@ -4,11 +4,13 @@
 #include <epicsExport.h>
 #include <iocsh.h>
 #include <string>
+#include <vector>
 
 #include <BLStructs.h>
 #include <BLFunctions.h>
 #include "channel.h"
 #include "params.h"
+#include "technique.h"
 
 #define MAX_CHANNELS 16
 
@@ -26,13 +28,14 @@
 #define CHAN_STRING "VSP_CHAN"
 #define STATUS_STRING "VSP_STATUS"
 #define START_STRING "VSP_START"
+#define ADD_STRING "VSP_ADD"
+#define CLEAR_STRING "VSP_CLEAR"
+#define TECHLIST_STRING "VSP_TECHLIST"
 
 #define EWE_STRING "VSP_EWE"
 #define ECE_STRING "VSP_ECE"
 #define I_STRING "VSP_I"
 #define TECH_STRING "VSP_TECH"
-
-class Params;
 
 class BioLogicDriver : public asynPortDriver {
 
@@ -78,9 +81,14 @@ private:
     int chanNum;
     int statusNum;
     int startNum;
+    int addNum;
+    int clearNum;
+    int techlistNum;
 
     std::string currentTechnique;
     int currentChannel;
+
+    vector<Technique> techniqueList;
 
     Channel createChannel(int id);
     void setupConnection();

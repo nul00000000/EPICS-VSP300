@@ -128,36 +128,56 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
     if (function < FIRST_BIOLOGICDRIVER_PARAM) {
         status = asynPortDriver::writeInt32(pasynUser, value);
-    } else if(function == uploadNum) {
-        if(currentTechnique != "unset") {
-            setStatusMessage("Uploading technique: " + currentTechnique + "\n");
-            string fullPath = "C:\\EC-Lab Development Package\\EC-Lab Development Package\\" + currentTechnique + "4.ecc";
-
-            TEccParams_t t = blParams->getEccParams();
-
-            int error = BL_LoadTechnique(deviceID, currentChannel, const_cast<char*>(fullPath.c_str()), t, true, true, true);
-            if(error) {
-                setStatusMessage(std::string("Uploading error: " + std::to_string(error)));
+    } else if(function == addNum) {
+        if(value == 1) {
+            Technique t = blParams->buildTechnique(currentTechnique);
+            techniqueList.push_back(t);
+            string techlist = "";
+            for(size_t i = 0; i < techniqueList.size(); i++) {
+                techlist += techniqueList[i].name + "\n";
             }
+            setStringParam(techlistNum, techlist);
+        }
+    } else if(function == clearNum) {
+        if(value == 1) {
+            techniqueList.clear();
+        }
+    } else if(function == uploadNum) {
+        if(value == 1 && currentTechnique != "unset") {
+            for(size_t i = 0; i < techniqueList.size(); i++) {
+                string fullPath = "C:\\EC-Lab Development Package\\EC-Lab Development Package\\" + techniqueList[i].name + "4.ecc";
+                TEccParams_t parms = techniqueList[i].getEccParams();
 
-            TExperimentInfos_t info;
-            BL_GetExperimentInfos(deviceID, currentChannel, &info);
-            
-            printf("techniqued success with filename: %s", info.Filename);
+                int error = BL_LoadTechnique(deviceID, currentChannel, 
+                        const_cast<char*>(fullPath.c_str()), parms, i == 0, i == techniqueList.size() - 1, false);
+                if(error) {
+                    setStatusMessage(std::string("Uploading error: " + std::to_string(error)));
+                } else {
+                    setStatusMessage("Uploaded technique: " + currentTechnique + "\n");
+                }
 
-            printf("Loaded Params:\n");
-            for(int i = 0; i < t.len; i++) {
-                printf("Name: \"%s\", with value: %d\n", t.pParams[i].ParamStr, t.pParams[i].ParamVal);
+                TExperimentInfos_t info;
+                BL_GetExperimentInfos(deviceID, currentChannel, &info);
+                
+                printf("Loaded Params:\n");
+                for(int i = 0; i < parms.len; i++) {
+                    printf("Name: \"%s\", with value: %d\n", parms.pParams[i].ParamStr, parms.pParams[i].ParamVal);
+                }
             }
         }
     } else if(function == chanNum) {
-        this->currentChannel = value;
+        if(value <= numChannels && value > 0) {
+            this->currentChannel = value - 1;
+        }
+        setIntegerParam(chanNum, this->currentChannel);
     } else if(function == startNum) {
-        int error = BL_StartChannel(deviceID, currentChannel);
-        if(error) {
-            setStatusMessage(std::string("Failed to start technique: ") + std::to_string(error)); 
-        } else {
-            setStatusMessage("Started Technique");
+        if(value == 1) {
+            int error = BL_StartChannel(deviceID, currentChannel);
+            if(error) {
+                setStatusMessage(std::string("Failed to start technique: ") + std::to_string(error));
+            } else {
+                setStatusMessage("Started Technique");
+            }
         }
     } else {
         if(blParams) {
@@ -305,7 +325,7 @@ void BioLogicDriver::updateValues() {
     for(int i = 0; i < numChannels; i++) {
         int code = BL_GetCurrentValues(deviceID, channels[i].id, &currentValues);
         if(code) {
-            printf("ERROR: Could not get channel values on channel %d\n", channels[i].id);
+            // printf("ERROR: Could not get channel values on channel %d\n", channels[i].id);
         } else {
             setDoubleParam(channels[i].ewe, currentValues.Ewe);
             setDoubleParam(channels[i].ece, currentValues.Ece);
@@ -314,7 +334,7 @@ void BioLogicDriver::updateValues() {
 
         code = BL_GetExperimentInfos(deviceID, channels[i].id, &expInfo);
         if(code) {
-            printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
+            // printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
         } else {
             setStringParam(channels[i].technique, expInfo.Filename);
         }
@@ -368,6 +388,9 @@ BioLogicDriver::BioLogicDriver(const char* portName)
     createParam(CHAN_STRING, asynParamInt32, &chanNum);
     createParam(STATUS_STRING, asynParamOctet, &statusNum);
     createParam(START_STRING, asynParamInt32, &startNum);
+    createParam(ADD_STRING, asynParamInt32, &addNum);
+    createParam(CLEAR_STRING, asynParamInt32, &clearNum);
+    createParam(TECHLIST_STRING, asynParamOctet, &techlistNum);
 
     char* substitutions = new char[40];
     for(int i = 0; i < numChannels; i++) {

@@ -35,7 +35,7 @@ record(stringout, "$(PREFIX):TECH:SET") {
 
 record(bo, "$(PREFIX):UPLOAD:SET") {
     field(DTYP, "asynInt32")
-    field(DESC, "Upload Technique")
+    field(DESC, "Upload Techniques")
     field(PINI, "YES")
     field(VAL, "0")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_UPLOAD")
@@ -48,6 +48,13 @@ record(ao, "$(PREFIX):CHAN:SET") {
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_CHAN")
 }
 
+record(ai, "$(PREFIX):CHAN") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Channel Selection")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_CHAN")
+}
+
 record(waveform, "$(PREFIX):STATUS") {
     field(DTYP, "asynOctetRead")
     field(DESC, "Status message")
@@ -57,10 +64,35 @@ record(waveform, "$(PREFIX):STATUS") {
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_STATUS")
 }
 
+record(waveform, "$(PREFIX):TECHLIST") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "Technique List")
+    field(FTVL, "CHAR")
+    field(NELM, "2048")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECHLIST")
+}
+
 record(bo, "$(PREFIX):START:SET") {
     field(DTYP, "asynInt32")
-    field(DESC, "Start Technique")
+    field(DESC, "Start Techniques")
     field(PINI, "YES")
     field(VAL, "0")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_START")
+}
+
+record(bo, "$(PREFIX):ADD:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Add Technique")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_ADD")
+}
+
+record(bo, "$(PREFIX):CLEAR:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Clear Techniques")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_CLEAR")
 }
