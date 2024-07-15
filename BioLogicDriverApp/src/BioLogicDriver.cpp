@@ -113,6 +113,18 @@ void BioLogicDriver::setStatusMessage(std::string msg) {
     callParamCallbacks();
 }
 
+void BioLogicDriver::updateListString() {
+    string techlist = "";
+    for(size_t i = 0; i < techniqueList.size(); i++) {
+        techlist += techniqueList[i].name;
+        if(currentTechlistIndex == i) {
+            techlist += " <";
+        }
+        techlist += "\n";
+    }
+    setStringParam(techlistNum, techlist);
+}
+
 /*
  * Function overwriting asynPortDriver base function.
  * Takes in a function (PV) changes, and a value it is changing to, and processes the input
@@ -132,11 +144,7 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         if(value == 1) {
             Technique t = blParams->buildTechnique(currentTechnique);
             techniqueList.push_back(t);
-            string techlist = "";
-            for(size_t i = 0; i < techniqueList.size(); i++) {
-                techlist += techniqueList[i].name + "\n";
-            }
-            setStringParam(techlistNum, techlist);
+            updateListString();
         }
     } else if(function == clearNum) {
         if(value == 1) {
@@ -171,6 +179,13 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             this->currentChannel = value - 1;
         }
         setIntegerParam(chanNum, this->currentChannel);
+    } else if(function == techlistIndexNum) {
+        if(value < techniqueList.size() && value >= 0) {
+            this->currentTechlistIndex = value;
+            setIntegerParam(techlistIndexNum, this->currentTechlistIndex);
+            blParams->setupParamsForTech(techniqueList[currentTechlistIndex].name);
+        }
+        updateListString();
     } else if(function == startNum) {
         if(value == 1) {
             int error = BL_StartChannel(deviceID, currentChannel);
@@ -392,6 +407,7 @@ BioLogicDriver::BioLogicDriver(const char* portName)
     createParam(ADD_STRING, asynParamInt32, &addNum);
     createParam(CLEAR_STRING, asynParamInt32, &clearNum);
     createParam(TECHLIST_STRING, asynParamOctet, &techlistNum);
+    createParam(TECHLIST_INDEX_STRING, asynParamInt32, &techlistIndexNum);
 
     char* substitutions = new char[40];
     for(int i = 0; i < numChannels; i++) {

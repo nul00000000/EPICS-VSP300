@@ -95,3 +95,45 @@ void Technique::addParamArrayValue(string name, int value) {
 void Technique::addParamArrayValue(string name, bool value) {
     boolArrays[name].push_back(value);
 }
+
+double Technique::getSingle(string param) {
+    if(!singles.count(param)) {
+        return 0;
+    }
+    return singles[param];
+}
+
+int Technique::getInt(string param) {
+    if(!ints.count(param)) {
+        return 0;
+    }
+    return ints[param];
+}
+
+bool Technique::getBool(string param) {
+    if(!bools.count(param)) {
+        return 0;
+    }
+    return bools[param];
+}
+
+vector<double> Technique::getSingles(string param) {
+    if(!singleArrays.count(param)) {
+        return vector<double>();
+    }
+    return singleArrays[param];
+}
+
+vector<int> Technique::getInts(string param) {
+    if(!intArrays.count(param)) {
+        return vector<int>();
+    }
+    return intArrays[param];
+}
+
+vector<bool> Technique::getBools(string param) {
+    if(!boolArrays.count(param)) {
+        return vector<bool>();
+    }
+    return boolArrays[param];
+}

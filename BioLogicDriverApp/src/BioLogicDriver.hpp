@@ -31,6 +31,7 @@
 #define ADD_STRING "VSP_ADD"
 #define CLEAR_STRING "VSP_CLEAR"
 #define TECHLIST_STRING "VSP_TECHLIST"
+#define TECHLIST_INDEX_STRING "VSP_TECHLIST_INDEX"
 
 #define EWE_STRING "VSP_EWE"
 #define ECE_STRING "VSP_ECE"
@@ -84,15 +85,18 @@ private:
     int addNum;
     int clearNum;
     int techlistNum;
+    int techlistIndexNum;
 
     std::string currentTechnique;
-    int currentChannel;
+    int currentChannel = 0;
+    int currentTechlistIndex = 0;
 
     vector<Technique> techniqueList;
 
     Channel createChannel(int id);
     void setupConnection();
     void setupInitialValues();
+    void updateListString();
 };
 
 #define NUM_BIOLOGICDRIVER_PARAMS ((int)(&LAST_BIOLOGICDRIVER_PARAM - &FIRST_BIOLOGICDRIVER_PARAM + 1))

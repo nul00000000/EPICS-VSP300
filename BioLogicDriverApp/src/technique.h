@@ -28,6 +28,13 @@ class Technique {
         void addParamArrayValue(string name, bool value);
 
         TEccParams_t getEccParams();
+
+        double getSingle(string param);
+        int getInt(string param);
+        bool getBool(string param);
+        vector<double> getSingles(string param);
+        vector<int> getInts(string param);
+        vector<bool> getBools(string param);
     private:
         map<string, double> singles;
         map<string, int> ints;

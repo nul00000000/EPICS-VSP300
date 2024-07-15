@@ -48,6 +48,20 @@ record(ao, "$(PREFIX):CHAN:SET") {
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_CHAN")
 }
 
+record(ai, "$(PREFIX):TECHLIST:INDEX") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Technique List Selection")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECHLIST_INDEX")
+}
+
+record(ao, "$(PREFIX):TECHLIST:INDEX:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Technique List Selection")
+    field(PINI, "YES")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECHLIST_INDEX")
+}
+
 record(ai, "$(PREFIX):CHAN") {
     field(DTYP, "asynInt32")
     field(DESC, "Channel Selection")
