@@ -141,6 +141,7 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
     } else if(function == clearNum) {
         if(value == 1) {
             techniqueList.clear();
+            setStringParam(techlistNum, "");
         }
     } else if(function == uploadNum) {
         if(value == 1 && currentTechnique != "unset") {

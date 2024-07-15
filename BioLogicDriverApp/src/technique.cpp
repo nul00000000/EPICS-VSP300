@@ -51,7 +51,11 @@ TEccParams_t Technique::getEccParams() {
         }
     }
     r.len = params.size();
-    r.pParams = params.data();
+    r.pParams = new TEccParam_t[r.len];
+
+    for(int i = 0; i < params.size(); i++) {
+        r.pParams[i] = params[i];
+    }
 
     return r;
 }
