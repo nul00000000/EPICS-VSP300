@@ -13,7 +13,7 @@ class Technique {
         Technique(string name);
         ~Technique();
 
-        const string name;
+        string name; //had to unconst this because = operator for vector fun
 
         void addParam(string name, double value);
         void addParam(string name, int value);

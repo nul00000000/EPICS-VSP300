@@ -13,7 +13,7 @@ class Technique {
         Technique(string name);
         ~Technique();
 
-        const string name;
+        string name; //had to unconst this because = operator for vector fun
 
         void addParam(string name, double value);
         void addParam(string name, int value);
@@ -28,6 +28,13 @@ class Technique {
         void addParamArrayValue(string name, bool value);
 
         TEccParams_t getEccParams();
+
+        double getSingle(string param);
+        int getInt(string param);
+        bool getBool(string param);
+        vector<double> getSingles(string param);
+        vector<int> getInts(string param);
+        vector<bool> getBools(string param);
     private:
         map<string, double> singles;
         map<string, int> ints;

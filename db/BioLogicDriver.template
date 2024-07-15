@@ -110,3 +110,19 @@ record(bo, "$(PREFIX):CLEAR:SET") {
     field(VAL, "0")
     field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_CLEAR")
 }
+
+record(bo, "$(PREFIX):REMOVE:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Remove Technique from list")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_REMOVE")
+}
+
+record(bo, "$(PREFIX):UPDATE:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Update Technique parameters")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_UPDATE")
+}

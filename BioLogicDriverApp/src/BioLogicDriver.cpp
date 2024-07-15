@@ -195,6 +195,15 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
                 setStatusMessage("Started Technique");
             }
         }
+    } else if(function == removeNum) {
+        if(value) {
+            techniqueList.erase(techniqueList.begin() + currentTechlistIndex);
+            updateListString();
+        }
+    } else if(function == updateNum) {
+        if(value) {
+            techniqueList[currentTechlistIndex] = blParams->buildTechnique(techniqueList[currentTechlistIndex].name);
+        }
     } else {
         if(blParams) {
             blParams->updateValue(function, &value);
@@ -408,6 +417,8 @@ BioLogicDriver::BioLogicDriver(const char* portName)
     createParam(CLEAR_STRING, asynParamInt32, &clearNum);
     createParam(TECHLIST_STRING, asynParamOctet, &techlistNum);
     createParam(TECHLIST_INDEX_STRING, asynParamInt32, &techlistIndexNum);
+    createParam(REMOVE_STRING, asynParamInt32, &removeNum);
+    createParam(UPDATE_STRING, asynParamInt32, &updateNum);
 
     char* substitutions = new char[40];
     for(int i = 0; i < numChannels; i++) {

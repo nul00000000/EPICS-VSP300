@@ -32,6 +32,8 @@
 #define CLEAR_STRING "VSP_CLEAR"
 #define TECHLIST_STRING "VSP_TECHLIST"
 #define TECHLIST_INDEX_STRING "VSP_TECHLIST_INDEX"
+#define REMOVE_STRING "VSP_REMOVE"
+#define UPDATE_STRING "VSP_UPDATE"
 
 #define EWE_STRING "VSP_EWE"
 #define ECE_STRING "VSP_ECE"
@@ -86,6 +88,8 @@ private:
     int clearNum;
     int techlistNum;
     int techlistIndexNum;
+    int removeNum;
+    int updateNum;
 
     std::string currentTechnique;
     int currentChannel = 0;
