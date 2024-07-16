@@ -26,9 +26,16 @@ record(ai, "$(PREFIX):$(CHAN):TECH") {
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH$(CHAN)")
 }
 
-record(ao, "$(PREFIX):$(CHAN):TECH:SET") {
+record(bi, "$(PREFIX):$(CHAN):RUNNING") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Technique Running Status")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_RUNNING$(CHAN)")
+}
+
+record(waveform, "$(PREFIX):FILE") {
     field(DTYP, "asynOctetWrite")
-    field(DESC, "Set Technique Name")
+    field(DESC, "Set File Name")
     field(PINI, "YES")
-    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH$(CHAN)")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_FILE")
 }

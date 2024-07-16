@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+
+using namespace std;
+
 struct Channel {
     int id;
     int ewe;
@@ -7,4 +11,10 @@ struct Channel {
     int I;
 
     int technique;
+
+    int running;
+    int file;
+    int saveData;
+
+    string filePath;
 };

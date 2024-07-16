@@ -96,6 +96,12 @@ Channel BioLogicDriver::createChannel(int id) {
     createParam(sampleString, asynParamFloat64, &c.I);
     snprintf(sampleString, 40, "%s%d", TECH_STRING, id);
     createParam(sampleString, asynParamOctet, &c.technique);
+    snprintf(sampleString, 40, "%s%d", RUNNING_STRING, &c.id);
+    createParam(sampleString, asynParamInt32, &c.running);
+    snprintf(sampleString, 40, "%s%d", FILE_STRING, id);
+    createParam(sampleString, asynParamOctet, &c.file);
+    snprintf(sampleString, 40, "%s%d", SAVEDATA_STRING, id);
+    createParam(sampleString, asynParamInt32, &c.saveData);
 
     return c;
 }
@@ -188,6 +194,7 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         updateListString();
     } else if(function == startNum) {
         if(value == 1) {
+            // dataOut.writeData((uint8_t*) "this is what the kids call a test\n");
             int error = BL_StartChannel(deviceID, currentChannel);
             if(error) {
                 setStatusMessage(std::string("Failed to start technique: ") + std::to_string(error));
@@ -205,10 +212,27 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
             techniqueList[currentTechlistIndex] = blParams->buildTechnique(techniqueList[currentTechlistIndex].name);
         }
     } else {
-        if(blParams) {
-            blParams->updateValue(function, &value);
-        } else {
-            printf("blParams accessed before being initialized");
+        bool isBLParams = true;
+
+        for(int i = 0; i < numChannels; i++) {
+            if(function == channels[i].saveData) {
+                TDataBuffer_t data;
+                TDataInfos_t info;
+                TCurrentValues_t curr;
+                BL_GetData(deviceID, channels[i].id, &data, &info, &curr);
+                
+                //meownload the data
+                isBLParams = false;
+                break;
+            }
+        }
+
+        if(isBLParams) {
+            if(blParams) {
+                blParams->updateValue(function, &value);
+            } else {
+                printf("blParams accessed before being initialized");
+            }
         }
     }
 
@@ -262,7 +286,19 @@ asynStatus BioLogicDriver::writeOctet(asynUser *pasynUser, const char *value, si
         currentTechnique = string(value);
         blParams->setupParamsForTech(currentTechnique);
     } else {
-        blParams->updateArrayValue(function, string(value));
+        bool isArrayValue = true;
+        for(int i = 0; i < numChannels; i++) {
+            if(function == channels[i].file) {
+                if(maxChars > 1) {
+                    channels[i].filePath = string(value);
+                }
+                isArrayValue = false;
+                break;
+            }
+        }
+        if(isArrayValue) {
+            blParams->updateArrayValue(function, string(value));
+        }
     }
 
     if (status) {
@@ -346,6 +382,7 @@ unsigned int* msgSize;
 void BioLogicDriver::updateValues() {
     TCurrentValues_t currentValues;
     TExperimentInfos_t expInfo;
+    TChannelInfos_t info;
 
     for(int i = 0; i < numChannels; i++) {
         int code = BL_GetCurrentValues(deviceID, channels[i].id, &currentValues);
@@ -357,11 +394,19 @@ void BioLogicDriver::updateValues() {
             setDoubleParam(channels[i].I, currentValues.I);
         }
 
+        
         code = BL_GetExperimentInfos(deviceID, channels[i].id, &expInfo);
+        if(code) {
+            // printf("ERROR: Could not get experiment info on channel %d\n", channels[i].id);
+        } else {
+            setStringParam(channels[i].technique, expInfo.Filename);
+        }
+
+        code = BL_GetChannelInfos(deviceID, channels[i].id, &info);
         if(code) {
             // printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
         } else {
-            setStringParam(channels[i].technique, expInfo.Filename);
+            setIntegerParam(channels[i].running, info.State == KBIO_STATE_RUN);
         }
         BL_GetMessage(deviceID, i, msg, msgSize);
         if(msgSize > 0) {
@@ -382,7 +427,7 @@ void update(void* parm) {
 }
 
 BioLogicDriver::BioLogicDriver(const char* portName)
-    : asynPortDriver(
+    : dataOut(string(getenv("USERPROFILE")) + "/Desktop/bioleggings"), asynPortDriver(
           portName, 1, /* maxAddr */
           (int)NUM_BIOLOGICDRIVER_PARAMS,
           asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask | asynDrvUserMask |

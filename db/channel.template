@@ -25,3 +25,11 @@ record(stringin, "$(PREFIX):$(CHAN):TECH") {
     field(SCAN, "I/O Intr")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH$(CHAN)")
 }
+
+record(bo, "$(PREFIX):SAVEDATA:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Save data from channel")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_SAVEDATA")
+}

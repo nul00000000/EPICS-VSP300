@@ -11,6 +11,7 @@
 #include "channel.h"
 #include "params.h"
 #include "technique.h"
+#include "filemanager.h"
 
 #define MAX_CHANNELS 16
 
@@ -34,11 +35,14 @@
 #define TECHLIST_INDEX_STRING "VSP_TECHLIST_INDEX"
 #define REMOVE_STRING "VSP_REMOVE"
 #define UPDATE_STRING "VSP_UPDATE"
+#define SAVEDATA_STRING "VSP_SAVEDATA"
 
 #define EWE_STRING "VSP_EWE"
 #define ECE_STRING "VSP_ECE"
 #define I_STRING "VSP_I"
 #define TECH_STRING "VSP_TECH"
+#define RUNNING_STRING "VSP_RUNNING"
+#define FILE_STRING "VSP_FILE"
 
 class BioLogicDriver : public asynPortDriver {
 
@@ -96,6 +100,8 @@ private:
     int currentTechlistIndex = 0;
 
     vector<Technique> techniqueList;
+
+    FileManager dataOut;
 
     Channel createChannel(int id);
     void setupConnection();
