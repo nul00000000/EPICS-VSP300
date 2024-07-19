@@ -26,10 +26,27 @@ record(stringin, "$(PREFIX):$(CHAN):TECH") {
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH$(CHAN)")
 }
 
-record(bo, "$(PREFIX):SAVEDATA:SET") {
+record(bo, "$(PREFIX):$(CHAN):SAVEDATA:SET") {
     field(DTYP, "asynInt32")
     field(DESC, "Save data from channel")
     field(PINI, "YES")
+    field(ZNAM, "false")
+    field(ONAM, "true")
     field(VAL, "0")
-    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_SAVEDATA")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_SAVEDATA$(CHAN)")
+}
+
+record(bi, "$(PREFIX):$(CHAN):RUNNING") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Technique Running Status")
+    field(SCAN, "I/O Intr")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_RUNNING$(CHAN)")
+}
+
+record(waveform, "$(PREFIX):$(CHAN):FILE") {
+    field(DTYP, "asynOctetWrite")
+    field(DESC, "Set File Name")
+    field(FTVL, "CHAR")
+    field(NELM, "2048")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_FILE$(CHAN)")
 }

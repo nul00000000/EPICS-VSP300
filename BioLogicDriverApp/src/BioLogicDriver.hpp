@@ -98,6 +98,7 @@ private:
     std::string currentTechnique;
     int currentChannel = 0;
     int currentTechlistIndex = 0;
+    bool saveData = false;
 
     vector<Technique> techniqueList;
 

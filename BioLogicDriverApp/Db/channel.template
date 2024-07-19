@@ -26,6 +26,14 @@ record(ai, "$(PREFIX):$(CHAN):TECH") {
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_TECH$(CHAN)")
 }
 
+record(bo, "$(PREFIX):SAVEDATA:SET") {
+    field(DTYP, "asynInt32")
+    field(DESC, "Save data from channel")
+    field(PINI, "YES")
+    field(VAL, "0")
+    field(OUT, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_SAVEDATA")
+}
+
 record(bi, "$(PREFIX):$(CHAN):RUNNING") {
     field(DTYP, "asynInt32")
     field(DESC, "Technique Running Status")

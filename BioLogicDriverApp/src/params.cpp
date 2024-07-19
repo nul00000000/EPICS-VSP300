@@ -223,7 +223,10 @@ void Params::updateArrayValue(int function, string values) {
                 vals.push_back(stod(element));
             }
             printf("5");
-            singleArrayValues[i] = vals.data();
+            singleArrayValues[i] = new double[vals.size()];
+            for(int j = 0; j < vals.size(); j++) {
+                singleArrayValues[i][j] = vals[j];
+            }
             singleArrayLengths[i] = vals.size();
             printf("6");
             return;
@@ -243,7 +246,10 @@ void Params::updateArrayValue(int function, string values) {
                 work = work.substr(commaIndex + 1);
                 vals.push_back(stoi(element));
             }
-            intArrayValues[i] = vals.data();
+            intArrayValues[i] = new int[vals.size()];
+            for(int j = 0; j < vals.size(); j++) {
+                intArrayValues[i][j] = vals[j];
+            }
             intArrayLengths[i] = vals.size();
             return;
         }
@@ -264,8 +270,8 @@ void Params::updateArrayValue(int function, string values) {
             }
             //me when vector<bool> doesn't have .data for memory optimization
             bool* b = new bool[vals.size()];
-            for(int i = 0; i < vals.size(); i++) {
-                b[i] = vals[i];
+            for(int j = 0; j < vals.size(); j++) {
+                b[j] = vals[j];
             }
             boolArrayValues[i] = b;
             boolArrayLengths[i] = vals.size();

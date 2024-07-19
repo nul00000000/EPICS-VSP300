@@ -17,4 +17,5 @@ struct Channel {
     int saveData;
 
     string filePath;
+    bool savingData;
 };

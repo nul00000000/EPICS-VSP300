@@ -96,7 +96,7 @@ Channel BioLogicDriver::createChannel(int id) {
     createParam(sampleString, asynParamFloat64, &c.I);
     snprintf(sampleString, 40, "%s%d", TECH_STRING, id);
     createParam(sampleString, asynParamOctet, &c.technique);
-    snprintf(sampleString, 40, "%s%d", RUNNING_STRING, &c.id);
+    snprintf(sampleString, 40, "%s%d", RUNNING_STRING, id);
     createParam(sampleString, asynParamInt32, &c.running);
     snprintf(sampleString, 40, "%s%d", FILE_STRING, id);
     createParam(sampleString, asynParamOctet, &c.file);
@@ -164,7 +164,7 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
                 TEccParams_t parms = techniqueList[i].getEccParams();
 
                 int error = BL_LoadTechnique(deviceID, currentChannel, 
-                        const_cast<char*>(fullPath.c_str()), parms, i == 0, i == techniqueList.size() - 1, false);
+                        const_cast<char*>(fullPath.c_str()), parms, i == 0, i == techniqueList.size() - 1, true);
                 if(error) {
                     setStatusMessage(std::string("Uploading error: " + std::to_string(error)));
                 } else {
@@ -184,7 +184,7 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         if(value <= numChannels && value > 0) {
             this->currentChannel = value - 1;
         }
-        setIntegerParam(chanNum, this->currentChannel);
+        setIntegerParam(chanNum, this->currentChannel + 1);
     } else if(function == techlistIndexNum) {
         if(value < techniqueList.size() && value >= 0) {
             this->currentTechlistIndex = value;
@@ -216,12 +216,7 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
 
         for(int i = 0; i < numChannels; i++) {
             if(function == channels[i].saveData) {
-                TDataBuffer_t data;
-                TDataInfos_t info;
-                TCurrentValues_t curr;
-                BL_GetData(deviceID, channels[i].id, &data, &info, &curr);
-                
-                //meownload the data
+                channels[i].savingData = value;
                 isBLParams = false;
                 break;
             }
@@ -356,11 +351,9 @@ void BioLogicDriver::setupConnection() {
 
     for(int i = 0; i < numChannels; i++) {
         this->channels[index] = createChannel(i);
-        this->channels[index].id = i;
         index++;
     }
 
-    printf("Flashing VSP-300 firmware...\n");
     setStatusMessage("Flashing VSP-300 firmware...");
     BL_LoadFirmware(deviceID, plugged, results, MAX_CHANNELS, false, true, 
             "C:/EC-Lab Development Package/EC-Lab Development Package/kernel4.bin", 
@@ -387,7 +380,7 @@ void BioLogicDriver::updateValues() {
     for(int i = 0; i < numChannels; i++) {
         int code = BL_GetCurrentValues(deviceID, channels[i].id, &currentValues);
         if(code) {
-            // printf("ERROR: Could not get channel values on channel %d\n", channels[i].id);
+            printf("ERROR: Could not get channel values on channel %d\n", channels[i].id);
         } else {
             setDoubleParam(channels[i].ewe, currentValues.Ewe);
             setDoubleParam(channels[i].ece, currentValues.Ece);
@@ -397,20 +390,32 @@ void BioLogicDriver::updateValues() {
         
         code = BL_GetExperimentInfos(deviceID, channels[i].id, &expInfo);
         if(code) {
-            // printf("ERROR: Could not get experiment info on channel %d\n", channels[i].id);
+            printf("ERROR: Could not get experiment info on channel %d\n", channels[i].id);
         } else {
             setStringParam(channels[i].technique, expInfo.Filename);
         }
 
         code = BL_GetChannelInfos(deviceID, channels[i].id, &info);
         if(code) {
-            // printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
+            printf("ERROR: Could not get channel info on channel %d\n", channels[i].id);
         } else {
             setIntegerParam(channels[i].running, info.State == KBIO_STATE_RUN);
         }
         BL_GetMessage(deviceID, i, msg, msgSize);
         if(msgSize > 0) {
             printf("[MSG:%d] %s", i, msg);
+        }
+
+        if(channels[i].saveData) {
+            // printf("literally saving data rn\n");
+            TDataBuffer_t data;
+            TDataInfos_t info;
+            TCurrentValues_t curr;
+            BL_GetData(deviceID, channels[i].id, &data, &info, &curr);
+
+            if(info.NbRows != 0 && info.NbCols != 0) { // prints nothing sad
+                dataOut.writeData(data.data, info.NbRows, info.NbCols);
+            }
         }
     }
 
@@ -427,7 +432,7 @@ void update(void* parm) {
 }
 
 BioLogicDriver::BioLogicDriver(const char* portName)
-    : dataOut(string(getenv("USERPROFILE")) + "/Desktop/bioleggings"), asynPortDriver(
+    : dataOut(string(getenv("USERPROFILE")) + "/Desktop/bioleggings", false), asynPortDriver(
           portName, 1, /* maxAddr */
           (int)NUM_BIOLOGICDRIVER_PARAMS,
           asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask | asynDrvUserMask |
