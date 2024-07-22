@@ -102,9 +102,7 @@ private:
 
     vector<Technique> techniqueList;
 
-    FileManager dataOut;
-
-    Channel createChannel(int id);
+    void createChannel(int id, Channel &channel);
     void setupConnection();
     void setupInitialValues();
     void updateListString();

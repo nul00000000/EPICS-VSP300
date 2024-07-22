@@ -204,16 +204,12 @@ void Params::updateValue(int function, void* value) {
 
 void Params::updateArrayValue(int function, string values) {
     string work = values;
-    printf("1");
     for(int i = 0; i < saIndex; i++) {
         if(function == singleArrays[i]) {
-            printf("2");
             if(singleArrayValues[i]) {
-                printf("3 (%d)", (uint64_t) singleArrayValues[i]);
                 delete[] singleArrayValues[i];
                 singleArrayValues[i] = nullptr;
             }
-            printf("4");
             vector<double> vals;
             size_t commaIndex = 0;
             while(commaIndex != string::npos) {
@@ -222,13 +218,11 @@ void Params::updateArrayValue(int function, string values) {
                 work = work.substr(commaIndex + 1);
                 vals.push_back(stod(element));
             }
-            printf("5");
             singleArrayValues[i] = new double[vals.size()];
             for(int j = 0; j < vals.size(); j++) {
                 singleArrayValues[i][j] = vals[j];
             }
             singleArrayLengths[i] = vals.size();
-            printf("6");
             return;
         }
     }

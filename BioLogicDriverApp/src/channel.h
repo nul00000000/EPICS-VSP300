@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "filemanager.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ struct Channel {
     int file;
     int saveData;
 
-    string filePath;
+    FileManager dataOut;
     bool savingData;
+    int lastTechIndex;
 };

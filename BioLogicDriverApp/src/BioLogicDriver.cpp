@@ -84,8 +84,7 @@ static void exitCallbackC(void* pPvt) {
 
 
 
-Channel BioLogicDriver::createChannel(int id) {
-    Channel c;
+void BioLogicDriver::createChannel(int id, Channel &c) {
     c.id = id;
     char sampleString[40];
     snprintf(sampleString, 40, "%s%d", EWE_STRING, id);
@@ -102,8 +101,6 @@ Channel BioLogicDriver::createChannel(int id) {
     createParam(sampleString, asynParamOctet, &c.file);
     snprintf(sampleString, 40, "%s%d", SAVEDATA_STRING, id);
     createParam(sampleString, asynParamInt32, &c.saveData);
-
-    return c;
 }
 
 void BioLogicDriver::setStatusMessage(char* msg) {
@@ -164,11 +161,11 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
                 TEccParams_t parms = techniqueList[i].getEccParams();
 
                 int error = BL_LoadTechnique(deviceID, currentChannel, 
-                        const_cast<char*>(fullPath.c_str()), parms, i == 0, i == techniqueList.size() - 1, true);
+                        const_cast<char*>(fullPath.c_str()), parms, i == 0, i == techniqueList.size() - 1, false);
                 if(error) {
                     setStatusMessage(std::string("Uploading error: " + std::to_string(error)));
                 } else {
-                    setStatusMessage("Uploaded technique: " + currentTechnique + "\n");
+                    setStatusMessage("Uploaded " + to_string(techniqueList.size()) + " techniques\n");
                 }
 
                 TExperimentInfos_t info;
@@ -196,6 +193,7 @@ asynStatus BioLogicDriver::writeInt32(asynUser* pasynUser, epicsInt32 value) {
         if(value == 1) {
             // dataOut.writeData((uint8_t*) "this is what the kids call a test\n");
             int error = BL_StartChannel(deviceID, currentChannel);
+            channels[currentChannel].lastTechIndex = -1;
             if(error) {
                 setStatusMessage(std::string("Failed to start technique: ") + std::to_string(error));
             } else {
@@ -285,7 +283,8 @@ asynStatus BioLogicDriver::writeOctet(asynUser *pasynUser, const char *value, si
         for(int i = 0; i < numChannels; i++) {
             if(function == channels[i].file) {
                 if(maxChars > 1) {
-                    channels[i].filePath = string(value);
+                    channels[i].dataOut.setDirectory(value, false);
+                    printf("Channel %d directory changed to \"%s\"\n", channels[i].id, value);
                 }
                 isArrayValue = false;
                 break;
@@ -350,7 +349,7 @@ void BioLogicDriver::setupConnection() {
     int index = 0;
 
     for(int i = 0; i < numChannels; i++) {
-        this->channels[index] = createChannel(i);
+        createChannel(i, channels[index]);
         index++;
     }
 
@@ -365,6 +364,12 @@ void BioLogicDriver::setupInitialValues() {
     this->setIntegerParam(idNum, deviceID);
     this->setIntegerParam(nchanNum, numChannels);
     this->setIntegerParam(versionNum, deviceInfo.FirmwareVersion);
+
+    for(int i = 0; i < numChannels; i++) {
+        string dir = DEFAULT_DIR + "/chan" + to_string(i + 1);
+        setStringParam(channels[i].file, dir);
+        channels[i].dataOut.setDirectory(dir, false);
+    }
 
     updateValues();
 }
@@ -406,15 +411,19 @@ void BioLogicDriver::updateValues() {
             printf("[MSG:%d] %s", i, msg);
         }
 
-        if(channels[i].saveData) {
-            // printf("literally saving data rn\n");
+        if(channels[i].savingData) {
             TDataBuffer_t data;
             TDataInfos_t info;
             TCurrentValues_t curr;
             BL_GetData(deviceID, channels[i].id, &data, &info, &curr);
 
-            if(info.NbRows != 0 && info.NbCols != 0) { // prints nothing sad
-                dataOut.writeData(data.data, info.NbRows, info.NbCols);
+            if(info.NbRows != 0 && info.NbCols != 0) {
+                if(info.TechniqueIndex != channels[i].lastTechIndex) {
+                    channels[i].lastTechIndex = info.TechniqueIndex;
+                    channels[i].dataOut.setTechnique(info.TechniqueIndex);
+                    // printf("technique changed to the index of %d\n", info.TechniqueIndex);
+                }
+                channels[i].dataOut.writeData(data.data, info.NbRows, info.NbCols);
             }
         }
     }
@@ -431,8 +440,7 @@ void update(void* parm) {
     }
 }
 
-BioLogicDriver::BioLogicDriver(const char* portName)
-    : dataOut(string(getenv("USERPROFILE")) + "/Desktop/bioleggings", false), asynPortDriver(
+BioLogicDriver::BioLogicDriver(const char* portName): asynPortDriver(
           portName, 1, /* maxAddr */
           (int)NUM_BIOLOGICDRIVER_PARAMS,
           asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask | asynDrvUserMask |

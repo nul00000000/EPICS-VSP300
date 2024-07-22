@@ -1,16 +1,11 @@
 #include "filemanager.h"
 
+FileManager::FileManager() {
+    setDirectory(DEFAULT_DIR, DEFAULT_HEX);
+}
+
 FileManager::FileManager(string directory, bool hex) {
-    this->usingHex = hex;
-    int num = 0;
-    while(doesFileExist(directory + "/test" + to_string(num) + (hex ? ".hex" : ".bin"))) {
-        num++;
-    }
-    if(hex) {
-        fileStream = ofstream(directory + "/test" + to_string(num) + ".hex");
-    } else {
-        fileStream = ofstream(directory + "/test" + to_string(num) + ".bin", ios::binary);
-    }
+    setDirectory(directory, hex);
 }
 
 FileManager::~FileManager() {
@@ -18,20 +13,56 @@ FileManager::~FileManager() {
 }
 
 void FileManager::setDirectory(string directory, bool hex) {
+    ready = false;
     this->usingHex = hex;
-    fileStream.close();
-    int num = 0;
-    while(doesFileExist(directory + "/test" + to_string(num) + (hex ? ".hex" : ".bin"))) {
-        num++;
+    if(fileStream.is_open()) {
+        fileStream.close();
     }
-    if(hex) {
-        fileStream = ofstream(directory + "/test" + to_string(num) + ".hex");
+    size_t i = directory.find("//");
+    if(i == string::npos) {
+        this->directory = directory;
     } else {
-        fileStream = ofstream(directory + "/test" + to_string(num) + ".bin", ios::binary);
+        this->directory = directory.replace(i, 2, "/");
     }
 }
 
+void FileManager::setTechnique(string techniqueName) {
+    if(fileStream.is_open()) {
+        fileStream.close();
+    }
+    int num = 0;
+    while(doesFileExist(directory + "/test_" + to_string(num) + "_" + techniqueName + (usingHex ? ".hex" : ".bin"))) {
+        num++;
+    }
+    if(usingHex) {
+        fileStream = ofstream(directory + "/test_" + to_string(num) + "_" + techniqueName + ".hex");
+    } else {
+        fileStream = ofstream(directory + "/test_" + to_string(num) + "_" + techniqueName + ".bin", ios::binary);
+    }
+    ready = true;
+}
+
+void FileManager::setTechnique(int techNum) {
+    if(fileStream.is_open()) {
+        fileStream.close();
+    }
+    int num = 0;
+    while(doesFileExist(directory + "/test_" + to_string(num) + "_tech" + to_string(techNum) + (usingHex ? ".hex" : ".bin"))) {
+        num++;
+    }
+    if(usingHex) {
+        fileStream = ofstream(directory + "/test_" + to_string(num) + "_tech" + to_string(techNum) + ".hex");
+    } else {
+        fileStream = ofstream(directory + "/test_" + to_string(num) + "_tech" + to_string(techNum) + ".bin", ios::binary);
+    }
+    ready = true;
+}
+
 void FileManager::writeData(uint32_t* data, int numRows, int rowSize) {
+    if(!ready) {
+        printf("FileManager not ready, please set a technique\n");
+        return;
+    }
     if(usingHex) {
         writeDataHex(data, numRows, rowSize);
     } else {

@@ -43,9 +43,18 @@ record(bi, "$(PREFIX):$(CHAN):RUNNING") {
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_RUNNING$(CHAN)")
 }
 
-record(waveform, "$(PREFIX):$(CHAN):FILE") {
+record(waveform, "$(PREFIX):$(CHAN):FILE:SET") {
     field(DTYP, "asynOctetWrite")
     field(DESC, "Set File Name")
+    field(FTVL, "CHAR")
+    field(NELM, "2048")
+    field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_FILE$(CHAN)")
+}
+
+record(waveform, "$(PREFIX):$(CHAN):FILE") {
+    field(DTYP, "asynOctetRead")
+    field(DESC, "File Name")
+    field(SCAN, "I/O Intr")
     field(FTVL, "CHAR")
     field(NELM, "2048")
     field(INP, "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))VSP_FILE$(CHAN)")
