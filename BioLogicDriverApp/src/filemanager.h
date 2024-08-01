@@ -23,7 +23,6 @@ class FileManager {
         void setTechnique(int techNum);
 
         void writeData(uint32_t* data, int numRows, int rowSize);
-        void writeDataDebug(uint8_t* data);
     private:
         bool usingHex;
         string directory;

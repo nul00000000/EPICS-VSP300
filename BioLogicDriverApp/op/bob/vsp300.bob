@@ -1,0 +1,1185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-07-25 14:10:40 by nulcr-->
+<display version="2.0.0">
+  <name>Main</name>
+  <width>1010</width>
+  <height>570</height>
+  <grid_color>
+    <color red="127" green="127" blue="127">
+    </color>
+  </grid_color>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_1</name>
+    <pv_name>DEV:VSP:ID</pv_name>
+    <x>10</x>
+    <y>450</y>
+    <width>50</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_2</name>
+    <text>ID</text>
+    <x>10</x>
+    <y>430</y>
+    <width>40</width>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <macros>
+      <CHAN>0</CHAN>
+    </macros>
+    <x>680</x>
+    <y>20</y>
+    <width>240</width>
+    <height>90</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Count Label</name>
+      <text>Ewe</text>
+      <width>40</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Count Text</name>
+      <pv_name>DEV:VSP:$(CHAN):EWE</pv_name>
+      <y>20</y>
+      <width>40</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ramp Rate</name>
+      <text>Ece</text>
+      <x>50</x>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_5</name>
+      <text>I</text>
+      <x>90</x>
+      <width>20</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>RR Text</name>
+      <pv_name>DEV:VSP:$(CHAN):ECE</pv_name>
+      <x>50</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>SP Text</name>
+      <pv_name>DEV:VSP:$(CHAN):I</pv_name>
+      <x>90</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Text Entry_10</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE:SET</pv_name>
+      <y>50</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="bool_button" version="2.0.0">
+      <name>Boolean Button_4</name>
+      <pv_name>DEV:VSP:$(CHAN):SAVEDATA:SET</pv_name>
+      <x>140</x>
+      <y>20</y>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_36</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE</pv_name>
+      <y>70</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_13</name>
+      <text>Save Data</text>
+      <x>140</x>
+    </widget>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update</name>
+    <pv_name>DEV:VSP:NCHAN</pv_name>
+    <x>70</x>
+    <y>450</y>
+    <width>50</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_3</name>
+    <text>NCHAN</text>
+    <x>70</x>
+    <y>430</y>
+    <width>50</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_2</name>
+    <pv_name>DEV:VSP:VERSION</pv_name>
+    <x>130</x>
+    <y>450</y>
+    <width>50</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_4</name>
+    <text>Firmware</text>
+    <x>130</x>
+    <y>430</y>
+    <width>60</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_3</name>
+    <pv_name>DEV:VSP:CHAN</pv_name>
+    <x>410</x>
+    <y>310</y>
+    <width>40</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_6</name>
+    <text>Technique</text>
+    <x>270</x>
+    <y>290</y>
+    <width>70</width>
+  </widget>
+  <widget type="combo" version="2.0.0">
+    <name>Combo Box</name>
+    <pv_name>DEV:VSP:TECH:SET</pv_name>
+    <x>270</x>
+    <y>310</y>
+    <width>70</width>
+    <height>20</height>
+    <items>
+      <item>ca</item>
+      <item>calimit</item>
+      <item>casg</item>
+      <item>casp</item>
+      <item>cp</item>
+      <item>cplimit</item>
+      <item>cpp</item>
+      <item>cv</item>
+      <item>dnpv</item>
+      <item>dpa</item>
+      <item>dpv</item>
+      <item>avt</item>
+      <item>gc</item>
+      <item>geis</item>
+      <item>gzir</item>
+      <item>IRcmp</item>
+      <item>iscan</item>
+      <item>iscanlimit</item>
+      <item>lasv</item>
+      <item>loop</item>
+      <item>lp</item>
+      <item>mp</item>
+      <item>npv</item>
+      <item>ocv</item>
+      <item>pdp</item>
+      <item>peis</item>
+      <item>psp</item>
+      <item>pzir</item>
+      <item>rnpv</item>
+      <item>seisg</item>
+      <item>seisp</item>
+      <item>swv</item>
+      <item>TI</item>
+      <item>TO</item>
+      <item>TOS</item>
+      <item>vscan</item>
+      <item>vscanlimit</item>
+      <item>zra</item>
+    </items>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:0</pv_name>
+    <x>150</x>
+    <y>20</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_1</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:1</pv_name>
+    <x>150</x>
+    <y>40</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_2</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:2</pv_name>
+    <x>150</x>
+    <y>60</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_1</name>
+    <text>Singles</text>
+    <x>10</x>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_3</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:3</pv_name>
+    <x>150</x>
+    <y>80</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_4</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:4</pv_name>
+    <x>150</x>
+    <y>100</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_5</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:5</pv_name>
+    <x>150</x>
+    <y>120</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_7</name>
+    <text>Bools</text>
+    <x>10</x>
+    <y>320</y>
+  </widget>
+  <widget type="bool_button" version="2.0.0">
+    <name>Boolean Button</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:0</pv_name>
+    <x>150</x>
+    <y>340</y>
+    <height>20</height>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_12</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:0</pv_name>
+    <x>410</x>
+    <y>20</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="bool_button" version="2.0.0">
+    <name>Boolean Button_1</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:1</pv_name>
+    <x>150</x>
+    <y>360</y>
+    <height>20</height>
+  </widget>
+  <widget type="bool_button" version="2.0.0">
+    <name>Boolean Button_2</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:2</pv_name>
+    <x>150</x>
+    <y>380</y>
+    <height>20</height>
+  </widget>
+  <widget type="bool_button" version="2.0.0">
+    <name>Boolean Button_3</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:3</pv_name>
+    <x>150</x>
+    <y>400</y>
+    <height>20</height>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_16</name>
+    <pv_name>DEV:VSP:PARAM:INT:0</pv_name>
+    <x>150</x>
+    <y>240</y>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_17</name>
+    <pv_name>DEV:VSP:PARAM:INT:1</pv_name>
+    <x>150</x>
+    <y>260</y>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_18</name>
+    <pv_name>DEV:VSP:PARAM:INT:2</pv_name>
+    <x>150</x>
+    <y>280</y>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_8</name>
+    <text>Integers</text>
+    <x>10</x>
+    <y>220</y>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_19</name>
+    <pv_name>DEV:VSP:PARAM:INT:3</pv_name>
+    <x>150</x>
+    <y>300</y>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_5</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:0:LABEL</pv_name>
+    <x>10</x>
+    <y>20</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_6</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:1:LABEL</pv_name>
+    <x>10</x>
+    <y>40</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_7</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:2:LABEL</pv_name>
+    <x>10</x>
+    <y>60</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_8</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:3:LABEL</pv_name>
+    <x>10</x>
+    <y>80</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_9</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:4:LABEL</pv_name>
+    <x>10</x>
+    <y>100</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_10</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:5:LABEL</pv_name>
+    <x>10</x>
+    <y>120</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_13</name>
+    <pv_name>DEV:VSP:PARAM:INT:3:LABEL</pv_name>
+    <x>10</x>
+    <y>300</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_14</name>
+    <pv_name>DEV:VSP:PARAM:INT:2:LABEL</pv_name>
+    <x>10</x>
+    <y>280</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_15</name>
+    <pv_name>DEV:VSP:PARAM:INT:1:LABEL</pv_name>
+    <x>10</x>
+    <y>260</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_16</name>
+    <pv_name>DEV:VSP:PARAM:INT:0:LABEL</pv_name>
+    <x>10</x>
+    <y>240</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_19</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:3:LABEL</pv_name>
+    <x>10</x>
+    <y>400</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_20</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:2:LABEL</pv_name>
+    <x>10</x>
+    <y>380</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_21</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:1:LABEL</pv_name>
+    <x>10</x>
+    <y>360</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_22</name>
+    <pv_name>DEV:VSP:PARAM:BOOL:0:LABEL</pv_name>
+    <x>10</x>
+    <y>340</y>
+    <width>140</width>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_6</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:6</pv_name>
+    <x>150</x>
+    <y>140</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_7</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:7</pv_name>
+    <x>150</x>
+    <y>160</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_8</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:8</pv_name>
+    <x>150</x>
+    <y>180</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_9</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:9</pv_name>
+    <x>150</x>
+    <y>200</y>
+    <precision>3</precision>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_11</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:6:LABEL</pv_name>
+    <x>10</x>
+    <y>140</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_12</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:7:LABEL</pv_name>
+    <x>10</x>
+    <y>160</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_17</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:8:LABEL</pv_name>
+    <x>10</x>
+    <y>180</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_18</name>
+    <pv_name>DEV:VSP:PARAM:SINGLE:9:LABEL</pv_name>
+    <x>10</x>
+    <y>200</y>
+    <width>140</width>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>DEV:VSP:CLEAR:SET</pv_name>
+        <value>1</value>
+        <description>WritePV</description>
+      </action>
+    </actions>
+    <pv_name>DEV:VSP:CLEAR:SET</pv_name>
+    <text>Clear</text>
+    <x>270</x>
+    <y>350</y>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>Single Arrays</text>
+    <x>410</x>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_13</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:1</pv_name>
+    <x>410</x>
+    <y>40</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_14</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:2</pv_name>
+    <x>410</x>
+    <y>60</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_15</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:3</pv_name>
+    <x>410</x>
+    <y>80</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_20</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:4</pv_name>
+    <x>410</x>
+    <y>100</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_9</name>
+    <text>Int Arrays</text>
+    <x>410</x>
+    <y>120</y>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_21</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:1</pv_name>
+    <x>410</x>
+    <y>160</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_22</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:2</pv_name>
+    <x>410</x>
+    <y>180</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_23</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:3</pv_name>
+    <x>410</x>
+    <y>200</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_25</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:0</pv_name>
+    <x>410</x>
+    <y>140</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_10</name>
+    <text>Bool Arrays</text>
+    <x>410</x>
+    <y>220</y>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_26</name>
+    <pv_name>DEV:VSP:PARAM:BOOLARR:1</pv_name>
+    <x>410</x>
+    <y>260</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry_27</name>
+    <pv_name>DEV:VSP:PARAM:BOOLARR:0</pv_name>
+    <x>410</x>
+    <y>240</y>
+    <width>240</width>
+    <format>6</format>
+    <vertical_alignment>0</vertical_alignment>
+    <wrap_words>true</wrap_words>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_23</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:4:LABEL</pv_name>
+    <x>270</x>
+    <y>100</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_24</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:0:LABEL</pv_name>
+    <x>270</x>
+    <y>20</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_25</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:1:LABEL</pv_name>
+    <x>270</x>
+    <y>40</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_26</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:2:LABEL</pv_name>
+    <x>270</x>
+    <y>60</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_27</name>
+    <pv_name>DEV:VSP:PARAM:SINGLEARR:3:LABEL</pv_name>
+    <x>270</x>
+    <y>80</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_28</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:3:LABEL</pv_name>
+    <x>270</x>
+    <y>200</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_29</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:2:LABEL</pv_name>
+    <x>270</x>
+    <y>180</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_30</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:1:LABEL</pv_name>
+    <x>270</x>
+    <y>160</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_31</name>
+    <pv_name>DEV:VSP:PARAM:INTARR:0:LABEL</pv_name>
+    <x>270</x>
+    <y>140</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_32</name>
+    <pv_name>DEV:VSP:PARAM:BOOLARR:0:LABEL</pv_name>
+    <x>270</x>
+    <y>240</y>
+    <width>140</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_33</name>
+    <pv_name>DEV:VSP:PARAM:BOOLARR:1:LABEL</pv_name>
+    <x>270</x>
+    <y>260</y>
+    <width>140</width>
+  </widget>
+  <widget type="spinner" version="2.0.0">
+    <name>Spinner</name>
+    <pv_name>DEV:VSP:CHAN:SET</pv_name>
+    <x>350</x>
+    <y>310</y>
+    <width>50</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_11</name>
+    <text>Channel Select</text>
+    <x>350</x>
+    <y>290</y>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_4</name>
+    <pv_name>DEV:VSP:STATUS</pv_name>
+    <x>10</x>
+    <y>480</y>
+    <width>240</width>
+    <format>6</format>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_1</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>DEV:VSP:ADD:SET</pv_name>
+        <value>1</value>
+        <description>WritePV</description>
+      </action>
+    </actions>
+    <pv_name>DEV:VSP:ADD:SET</pv_name>
+    <text>Add Technique</text>
+    <x>270</x>
+    <y>390</y>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_2</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>DEV:VSP:UPLOAD:SET</pv_name>
+        <value>1</value>
+        <description>WritePV</description>
+      </action>
+    </actions>
+    <pv_name>DEV:VSP:UPLOAD:SET</pv_name>
+    <text>Upload</text>
+    <x>270</x>
+    <y>430</y>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_3</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>DEV:VSP:START:SET</pv_name>
+        <value>1</value>
+        <description>WritePV</description>
+      </action>
+    </actions>
+    <pv_name>DEV:VSP:START:SET</pv_name>
+    <text>Start</text>
+    <x>270</x>
+    <y>470</y>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_34</name>
+    <pv_name>DEV:VSP:TECHLIST</pv_name>
+    <x>430</x>
+    <y>350</y>
+    <height>150</height>
+    <format>6</format>
+  </widget>
+  <widget type="spinner" version="2.0.0">
+    <name>Spinner_1</name>
+    <pv_name>DEV:VSP:TECHLIST:INDEX:SET</pv_name>
+    <x>560</x>
+    <y>380</y>
+    <width>50</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_12</name>
+    <text>List Index</text>
+    <x>560</x>
+    <y>360</y>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_35</name>
+    <pv_name>DEV:VSP:TECHLIST:INDEX</pv_name>
+    <x>620</x>
+    <y>380</y>
+    <width>40</width>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_4</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>DEV:VSP:UPDATE:SET</pv_name>
+        <value>1</value>
+        <description>WritePV</description>
+      </action>
+    </actions>
+    <pv_name>DEV:VSP:UPDATE:SET</pv_name>
+    <text>Update</text>
+    <x>560</x>
+    <y>450</y>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_5</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>DEV:VSP:REMOVE:SET</pv_name>
+        <value>1</value>
+        <description>WritePV</description>
+      </action>
+    </actions>
+    <pv_name>DEV:VSP:REMOVE:SET</pv_name>
+    <text>Remove</text>
+    <x>560</x>
+    <y>410</y>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_1</name>
+    <macros>
+      <CHAN>1</CHAN>
+    </macros>
+    <x>680</x>
+    <y>120</y>
+    <width>240</width>
+    <height>90</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Count Label_1</name>
+      <text>Ewe</text>
+      <width>40</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Count Text_1</name>
+      <pv_name>DEV:VSP:$(CHAN):EWE</pv_name>
+      <y>20</y>
+      <width>40</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ramp Rate_1</name>
+      <text>Ece</text>
+      <x>50</x>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_14</name>
+      <text>I</text>
+      <x>90</x>
+      <width>20</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>RR Text_1</name>
+      <pv_name>DEV:VSP:$(CHAN):ECE</pv_name>
+      <x>50</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>SP Text_1</name>
+      <pv_name>DEV:VSP:$(CHAN):I</pv_name>
+      <x>90</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Text Entry_24</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE:SET</pv_name>
+      <y>50</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="bool_button" version="2.0.0">
+      <name>Boolean Button_5</name>
+      <pv_name>DEV:VSP:$(CHAN):SAVEDATA:SET</pv_name>
+      <x>140</x>
+      <y>20</y>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_37</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE</pv_name>
+      <y>70</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_15</name>
+      <text>Save Data</text>
+      <x>140</x>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_2</name>
+    <macros>
+      <CHAN>2</CHAN>
+    </macros>
+    <x>680</x>
+    <y>220</y>
+    <width>240</width>
+    <height>90</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Count Label_2</name>
+      <text>Ewe</text>
+      <width>40</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Count Text_2</name>
+      <pv_name>DEV:VSP:$(CHAN):EWE</pv_name>
+      <y>20</y>
+      <width>40</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ramp Rate_2</name>
+      <text>Ece</text>
+      <x>50</x>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_16</name>
+      <text>I</text>
+      <x>90</x>
+      <width>20</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>RR Text_2</name>
+      <pv_name>DEV:VSP:$(CHAN):ECE</pv_name>
+      <x>50</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>SP Text_2</name>
+      <pv_name>DEV:VSP:$(CHAN):I</pv_name>
+      <x>90</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Text Entry_28</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE:SET</pv_name>
+      <y>50</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="bool_button" version="2.0.0">
+      <name>Boolean Button_6</name>
+      <pv_name>DEV:VSP:$(CHAN):SAVEDATA:SET</pv_name>
+      <x>140</x>
+      <y>20</y>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_38</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE</pv_name>
+      <y>70</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_17</name>
+      <text>Save Data</text>
+      <x>140</x>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_3</name>
+    <macros>
+      <CHAN>3</CHAN>
+    </macros>
+    <x>680</x>
+    <y>320</y>
+    <width>240</width>
+    <height>90</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Count Label_3</name>
+      <text>Ewe</text>
+      <width>40</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Count Text_3</name>
+      <pv_name>DEV:VSP:$(CHAN):EWE</pv_name>
+      <y>20</y>
+      <width>40</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ramp Rate_3</name>
+      <text>Ece</text>
+      <x>50</x>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_18</name>
+      <text>I</text>
+      <x>90</x>
+      <width>20</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>RR Text_3</name>
+      <pv_name>DEV:VSP:$(CHAN):ECE</pv_name>
+      <x>50</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>SP Text_3</name>
+      <pv_name>DEV:VSP:$(CHAN):I</pv_name>
+      <x>90</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Text Entry_29</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE:SET</pv_name>
+      <y>50</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="bool_button" version="2.0.0">
+      <name>Boolean Button_7</name>
+      <pv_name>DEV:VSP:$(CHAN):SAVEDATA:SET</pv_name>
+      <x>140</x>
+      <y>20</y>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_39</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE</pv_name>
+      <y>70</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_19</name>
+      <text>Save Data</text>
+      <x>140</x>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_4</name>
+    <macros>
+      <CHAN>4</CHAN>
+    </macros>
+    <x>680</x>
+    <y>420</y>
+    <width>240</width>
+    <height>90</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Count Label_4</name>
+      <text>Ewe</text>
+      <width>40</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Count Text_4</name>
+      <pv_name>DEV:VSP:$(CHAN):EWE</pv_name>
+      <y>20</y>
+      <width>40</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ramp Rate_4</name>
+      <text>Ece</text>
+      <x>50</x>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_20</name>
+      <text>I</text>
+      <x>90</x>
+      <width>20</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>RR Text_4</name>
+      <pv_name>DEV:VSP:$(CHAN):ECE</pv_name>
+      <x>50</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>SP Text_4</name>
+      <pv_name>DEV:VSP:$(CHAN):I</pv_name>
+      <x>90</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Text Entry_30</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE:SET</pv_name>
+      <y>50</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="bool_button" version="2.0.0">
+      <name>Boolean Button_8</name>
+      <pv_name>DEV:VSP:$(CHAN):SAVEDATA:SET</pv_name>
+      <x>140</x>
+      <y>20</y>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_40</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE</pv_name>
+      <y>70</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_21</name>
+      <text>Save Data</text>
+      <x>140</x>
+    </widget>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group_5</name>
+    <macros>
+      <CHAN>5</CHAN>
+    </macros>
+    <x>680</x>
+    <y>520</y>
+    <width>240</width>
+    <height>90</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="label" version="2.0.0">
+      <name>Count Label_5</name>
+      <text>Ewe</text>
+      <width>40</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Count Text_5</name>
+      <pv_name>DEV:VSP:$(CHAN):EWE</pv_name>
+      <y>20</y>
+      <width>40</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Ramp Rate_5</name>
+      <text>Ece</text>
+      <x>50</x>
+      <width>30</width>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_22</name>
+      <text>I</text>
+      <x>90</x>
+      <width>20</width>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>RR Text_5</name>
+      <pv_name>DEV:VSP:$(CHAN):ECE</pv_name>
+      <x>50</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>SP Text_5</name>
+      <pv_name>DEV:VSP:$(CHAN):I</pv_name>
+      <x>90</x>
+      <y>20</y>
+      <width>30</width>
+      <precision>3</precision>
+    </widget>
+    <widget type="textentry" version="3.0.0">
+      <name>Text Entry_31</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE:SET</pv_name>
+      <y>50</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="bool_button" version="2.0.0">
+      <name>Boolean Button_9</name>
+      <pv_name>DEV:VSP:$(CHAN):SAVEDATA:SET</pv_name>
+      <x>140</x>
+      <y>20</y>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>Text Update_41</name>
+      <pv_name>DEV:VSP:$(CHAN):FILE</pv_name>
+      <y>70</y>
+      <width>240</width>
+      <format>6</format>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label_23</name>
+      <text>Save Data</text>
+      <x>140</x>
+    </widget>
+  </widget>
+</display>

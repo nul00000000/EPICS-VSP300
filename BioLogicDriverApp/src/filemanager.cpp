@@ -93,7 +93,3 @@ bool FileManager::doesFileExist(string filePath) {
         return false;
     }
 }
-
-void FileManager::writeDataDebug(uint8_t* data) {
-    printf("[DEBUG] %s", data);
-}
