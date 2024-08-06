@@ -11,7 +11,9 @@ BioLogicDriverApp_registerRecordDeviceDriver(pdbbase)
 epicsEnvSet("PORT", "DRV1")
 epicsEnvSet("PREFIX", "DEV:VSP")
 
-BioLogicDriverConfig("$(PORT)")
+#switch which of these is commented in order to switch between connecting over USB or ethernet
+BioLogicDriverConfig("$(PORT)", "USB")
+#BioLogicDriverConfig("$(PORT)", "USB")
 
 
 #asynSetTraceMask("$(PORT)", -1, 0x0)

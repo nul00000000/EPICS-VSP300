@@ -13,6 +13,7 @@ DEVIOCSTATS=$(SUPPORT)/iocStats
 AUTOSAVE=$(SUPPORT)/autosave
 STREAM=$(SUPPORT)/stream
 ECLAB=$(SUPPORT)/../eclablib
+# HDF=$(SUPPORT)/../hdf
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 EPICS_BASE=C:/Users/nulcr/Documents/EPICS32/epics-base

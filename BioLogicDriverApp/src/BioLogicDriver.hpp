@@ -47,7 +47,7 @@
 class BioLogicDriver : public asynPortDriver {
 
 public:
-    BioLogicDriver(const char* portName);
+    BioLogicDriver(const char* portName, const char* connection = "USB0");
     ~BioLogicDriver();
 
     /* These are the methods that we override from asynPortDriver as needed*/
@@ -103,7 +103,7 @@ private:
     vector<Technique> techniqueList;
 
     void createChannel(int id, Channel &channel);
-    void setupConnection();
+    void setupConnection(const char* connection);
     void setupInitialValues();
     void updateListString();
 };

@@ -66,8 +66,15 @@ const char* driverName = "BioLogicDriver";
  * make sure to make the same edit to the constructor below
  *
  */
-extern "C" int BioLogicDriverConfig(const char* portName) {
+extern "C" int BioLogicDriverConfigUSB(const char* portName) {
     new BioLogicDriver(portName);
+    printf("Using USB connection\n");
+    return (asynSuccess);
+}
+
+extern "C" int BioLogicDriverConfigTCP(const char* portName) {
+    new BioLogicDriver(portName, "192.109.209.128");
+    printf("Using TCP connection\n");
     return (asynSuccess);
 }
 
@@ -321,8 +328,8 @@ void BioLogicDriver::report(FILE* fp, int details) {
     }
 }
 
-void BioLogicDriver::setupConnection() {
-    int code = BL_Connect("USB0", 5, &deviceID, &deviceInfo); //remember to change this you fool
+void BioLogicDriver::setupConnection(const char* connection) {
+    int code = BL_Connect(connection, 5, &deviceID, &deviceInfo); //remember to change this you fool
 
     if(code) {
         numChannels = 0;
@@ -440,7 +447,7 @@ void update(void* parm) {
     }
 }
 
-BioLogicDriver::BioLogicDriver(const char* portName): asynPortDriver(
+BioLogicDriver::BioLogicDriver(const char* portName, const char* connection = "USB0"): asynPortDriver(
           portName, 1, /* maxAddr */
           (int)NUM_BIOLOGICDRIVER_PARAMS,
           asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask | asynDrvUserMask |
@@ -461,7 +468,7 @@ BioLogicDriver::BioLogicDriver(const char* portName): asynPortDriver(
 
     blParams->createParams();
 
-    setupConnection();
+    setupConnection(connection);
 
     createParam(ID_STRING, asynParamInt32, &idNum);
     createParam(NCHAN_STRING, asynParamInt32, &nchanNum);
@@ -510,18 +517,25 @@ BioLogicDriver::~BioLogicDriver() {
 
 /* BioLogicDriverConfig -> These are the args passed to the constructor in the epics config function */
 static const iocshArg BioLogicDriverConfigArg0 = {"portName", iocshArgString};
+static const iocshArg BioLogicDriverConfigArg1 = {"connType", iocshArgString};
 
 
 /* Array of config args */
-static const iocshArg* const BioLogicDriverConfigArgs[] = {&BioLogicDriverConfigArg0};
+static const iocshArg* const BioLogicDriverConfigArgs[] = {&BioLogicDriverConfigArg0, &BioLogicDriverConfigArg1};
 
 /* what function to call at config */
 static void configBioLogicDriverCallFunc(const iocshArgBuf* args) {
-    BioLogicDriverConfig(args[0].sval);
+    if(strcmp(args[1].sval, "USB") == 0) {
+        BioLogicDriverConfigUSB(args[0].sval);
+    } else if(strcmp(args[1].sval, "TCP") == 0) {
+        BioLogicDriverConfigTCP(args[0].sval);
+    } else {
+        printf("BioLogicDriverConfig must be configured with wither USB or TCP\n");
+    }
 }
 
 /* information about the configuration function */
-static const iocshFuncDef configBioLogicDriver = {"BioLogicDriverConfig", 1, BioLogicDriverConfigArgs};
+static const iocshFuncDef configBioLogicDriver = {"BioLogicDriverConfig", 2, BioLogicDriverConfigArgs};
 
 /* IOC register function */
 static void BioLogicDriverRegister(void) { iocshRegister(&configBioLogicDriver, configBioLogicDriverCallFunc); }
