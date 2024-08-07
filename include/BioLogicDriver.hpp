@@ -47,7 +47,7 @@
 class BioLogicDriver : public asynPortDriver {
 
 public:
-    BioLogicDriver(const char* portName);
+    BioLogicDriver(const char* portName, const char* connection = "USB0");
     ~BioLogicDriver();
 
     /* These are the methods that we override from asynPortDriver as needed*/
@@ -61,8 +61,21 @@ public:
     //virtual asynStatus disconnect(asynUser* pasynUser);
     virtual void report(FILE* fp, int details);
 
+    /**
+     * Polls various values from device and updaetes PVs
+     */
     void updateValues();
+    /**
+     * Set the status message PV
+     * 
+     * @param msg Message to send to PV
+     */
     void setStatusMessage(char* msg);
+    /**
+     * Set the status message PV
+     * 
+     * @param msg Message to send to PV
+     */
     void setStatusMessage(std::string msg);
 
 protected:
@@ -72,13 +85,30 @@ protected:
 #define LAST_BIOLOGICDRIVER_PARAM BioLogicDriverVersion
 
 private:
+    /**
+     * Array of channels on device
+     */
     Channel* channels;
+    /**
+     * Number of channels on device
+     */
     int numChannels;
 
+    /**
+     * Parameter handler
+     */
     Params* blParams;
 
+    /**
+     * Device id
+     */
     int deviceID;
+    /**
+     * Device info received from device
+     */
     TDeviceInfos_t deviceInfo;
+
+    // PV handlers
 
     int idNum;
     int nchanNum;
@@ -95,15 +125,26 @@ private:
     int removeNum;
     int updateNum;
 
+    /**
+     * Current technique being editted by parameter handler
+     */
     std::string currentTechnique;
+    /**
+     * Current channel being interacted with
+     */
     int currentChannel = 0;
+    /**
+     * Current index in technique list being editted
+     */
     int currentTechlistIndex = 0;
-    bool saveData = false;
-
+    
+    /**
+     * 
+     */
     vector<Technique> techniqueList;
 
     void createChannel(int id, Channel &channel);
-    void setupConnection();
+    void setupConnection(const char* connection);
     void setupInitialValues();
     void updateListString();
 };

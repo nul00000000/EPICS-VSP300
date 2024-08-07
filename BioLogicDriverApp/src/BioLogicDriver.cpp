@@ -447,7 +447,7 @@ void update(void* parm) {
     }
 }
 
-BioLogicDriver::BioLogicDriver(const char* portName, const char* connection = "USB0"): asynPortDriver(
+BioLogicDriver::BioLogicDriver(const char* portName, const char* connection): asynPortDriver(
           portName, 1, /* maxAddr */
           (int)NUM_BIOLOGICDRIVER_PARAMS,
           asynInt32Mask | asynFloat64Mask | asynFloat64ArrayMask | asynDrvUserMask |

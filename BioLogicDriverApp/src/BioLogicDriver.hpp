@@ -61,8 +61,21 @@ public:
     //virtual asynStatus disconnect(asynUser* pasynUser);
     virtual void report(FILE* fp, int details);
 
+    /**
+     * Polls various values from device and updaetes PVs
+     */
     void updateValues();
+    /**
+     * Set the status message PV
+     * 
+     * @param msg Message to send to PV
+     */
     void setStatusMessage(char* msg);
+    /**
+     * Set the status message PV
+     * 
+     * @param msg Message to send to PV
+     */
     void setStatusMessage(std::string msg);
 
 protected:
@@ -72,13 +85,30 @@ protected:
 #define LAST_BIOLOGICDRIVER_PARAM BioLogicDriverVersion
 
 private:
+    /**
+     * Array of channels on device
+     */
     Channel* channels;
+    /**
+     * Number of channels on device
+     */
     int numChannels;
 
+    /**
+     * Parameter handler
+     */
     Params* blParams;
 
+    /**
+     * Device id
+     */
     int deviceID;
+    /**
+     * Device info received from device
+     */
     TDeviceInfos_t deviceInfo;
+
+    // PV handlers
 
     int idNum;
     int nchanNum;
@@ -95,16 +125,44 @@ private:
     int removeNum;
     int updateNum;
 
+    /**
+     * Current technique being editted by parameter handler
+     */
     std::string currentTechnique;
+    /**
+     * Current channel being interacted with
+     */
     int currentChannel = 0;
+    /**
+     * Current index in technique list being editted
+     */
     int currentTechlistIndex = 0;
-    bool saveData = false;
 
+    /**
+     * List of techniques that will be uploaded to the device
+     */
     vector<Technique> techniqueList;
 
+    /**
+     * Creates and initializes a new channel
+     * 
+     * @param id ID of channel
+     * @param channel Channel object to initialize
+     */
     void createChannel(int id, Channel &channel);
+    /**
+     * Sets up connection to the device
+     * 
+     * @param connection Connection to use, either a USB# or IP address
+     */
     void setupConnection(const char* connection);
+    /**
+     * Sets up initial values for device and IOC
+     */
     void setupInitialValues();
+    /**
+     * Update string PV representing technique list
+     */
     void updateListString();
 };
 
